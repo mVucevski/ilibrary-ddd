@@ -4,10 +4,8 @@ import lombok.Getter;
 import org.springframework.data.util.ProxyUtils;
 
 import javax.persistence.EmbeddedId;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
-import java.util.Objects;
+
 
 @Getter
 @MappedSuperclass
