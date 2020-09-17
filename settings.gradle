@@ -1,0 +1,5 @@
+rootProject.name = 'iLibrary - DDD'
+
+include 'shared-kernel'
+include 'user-management'
+include 'book-catalog'
