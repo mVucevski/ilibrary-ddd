@@ -1,18 +1,28 @@
 package com.mvucevski.bookcatalog.domain;
 
+import com.mvucevski.sharedkernel.domain.base.ValueObject;
 import lombok.Value;
 import org.springframework.lang.NonNull;
 
-@Value
-class Title {
+import javax.persistence.Embeddable;
 
-    String title;
+@Embeddable
+public class Title implements ValueObject {
 
-    Title(@NonNull String title) {
+    private final String title;
+
+    public Title() {
+        title = "";
+    }
+
+    public Title(@NonNull String title) {
         if (title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be empty");
         }
         this.title = title.trim();
     }
 
+    public String getTitle() {
+        return title;
+    }
 }

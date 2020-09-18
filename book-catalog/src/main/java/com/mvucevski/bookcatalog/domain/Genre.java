@@ -1,5 +1,5 @@
 package com.mvucevski.bookcatalog.domain;
 
 public enum Genre {
-    Adventure, Fantasy, Crime, Thriller, Romance, History
+    Adventure, Fantasy, Crime, Thriller, Romance, History, NonFiction
 }

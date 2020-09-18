@@ -3,12 +3,10 @@ package com.mvucevski.bookcatalog.api;
 import com.mvucevski.bookcatalog.domain.Book;
 import com.mvucevski.bookcatalog.domain.BookId;
 import com.mvucevski.bookcatalog.service.BooksService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,11 +27,16 @@ public class BooksController {
 
     //TODO Return DTO instead of entity
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getAllBooks(@PathVariable String id){
+    public ResponseEntity<Book> getBookById(@PathVariable String id){
         return booksService.getBookById(new BookId(id))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("")
+    public ResponseEntity<?> createNewBook(@RequestBody Book book) {
 
+        Book newBook = booksService.saveOrUpdateBook(book);
+        return new ResponseEntity<Book>(newBook, HttpStatus.CREATED);
+    }
 }

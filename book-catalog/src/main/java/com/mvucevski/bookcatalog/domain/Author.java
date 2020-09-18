@@ -1,17 +1,29 @@
 package com.mvucevski.bookcatalog.domain;
 
+import com.mvucevski.sharedkernel.domain.base.ValueObject;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import org.springframework.lang.NonNull;
 
-@Value
-class Author {
+import javax.persistence.Embeddable;
 
-    String name;
+@Embeddable
+public class Author implements ValueObject {
 
-    Author(@NonNull String name) {
+    private final String name;
+
+    public Author(){
+        name = "";
+    }
+
+    public Author(@NonNull String name) {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Author cannot be empty");
         }
         this.name = name.trim();
+    }
+
+    public String getName() {
+        return name;
     }
 }

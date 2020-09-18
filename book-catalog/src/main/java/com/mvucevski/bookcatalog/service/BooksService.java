@@ -30,7 +30,7 @@ public class BooksService {
         return booksRepository.getBookById(bookId);
     }
 
-    public Book addNewBook(Book book){
+    public Book saveOrUpdateBook(Book book){
         return booksRepository.saveBook(book);
     }
 

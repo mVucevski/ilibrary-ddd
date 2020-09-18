@@ -47,9 +47,10 @@ public class Book extends AbstractEntity<BookId> {
     private LocalDateTime updatedAt;
 
 
-    public Book(Title title, Author author, String description, Language language, Genre genre, int availableCopies,
+    public Book(BookId id, Title title, Author author, String description, Language language, Genre genre, int availableCopies,
                 String coverUrl, LocalDate publicationDate) {
-        super(DomainObjectId.randomId(BookId.class));
+        super(id);
+        this.id = id;
         this.title = title;
         this.author = author;
         this.description = description;

@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Value
-class ISBN implements ValueObject {
+public class ISBN implements ValueObject {
 
     private static final String VERY_SIMPLE_ISBN_CHECK = "^\\d{9}[\\d|X]$";
 
