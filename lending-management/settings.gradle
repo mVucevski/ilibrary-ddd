@@ -1,0 +1,3 @@
+rootProject.name = 'lending-management'
+
+include ':shared-kernel'
