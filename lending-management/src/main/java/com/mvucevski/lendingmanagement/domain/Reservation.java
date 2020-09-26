@@ -13,8 +13,12 @@ public class Reservation extends AbstractEntity<ReservationId> {
     @Version
     private Long version;
 
+    @Embedded
+    @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "book_id", nullable = false)))
     private BookId bookId;
 
+    @Embedded
+    @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false)))
     private UserId userId;
 
     @Column(columnDefinition = "TIMESTAMP", name = "ends_at")

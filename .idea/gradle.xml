@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/book-catalog" />
+            <option value="$PROJECT_DIR$/book-review" />
             <option value="$PROJECT_DIR$/lending-management" />
             <option value="$PROJECT_DIR$/shared-kernel" />
             <option value="$PROJECT_DIR$/user-management" />

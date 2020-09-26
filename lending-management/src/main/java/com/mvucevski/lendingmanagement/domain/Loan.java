@@ -15,8 +15,12 @@ public class Loan extends AbstractEntity<LoanId> {
     @Version
     private Long version;
 
+    @Embedded
+    @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "book_id", nullable = false)))
     private BookId bookId;
 
+    @Embedded
+    @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false)))
     private UserId userId;
 
     private int fee = 0;

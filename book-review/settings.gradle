@@ -1,0 +1,3 @@
+rootProject.name = 'book-review'
+
+include ':shared-kernel'
