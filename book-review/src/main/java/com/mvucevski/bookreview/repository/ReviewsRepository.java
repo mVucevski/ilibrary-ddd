@@ -1,5 +1,6 @@
 package com.mvucevski.bookreview.repository;
 
+import com.mvucevski.bookreview.domain.BookId;
 import com.mvucevski.bookreview.domain.Review;
 import com.mvucevski.bookreview.domain.ReviewId;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,6 @@ public interface ReviewsRepository {
     Review saveReview(Review review);
 
     Boolean deleteReview(ReviewId reviewId);
+
+    List<Review> getAllReviewsByBookId(BookId bookId);
 }

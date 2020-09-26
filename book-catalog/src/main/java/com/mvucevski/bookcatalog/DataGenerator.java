@@ -22,9 +22,7 @@ public class DataGenerator {
     public void generateData(){
 
         if(booksRepository.getAllBooks().isEmpty()){
-            BookId id = new BookId();
-            System.out.println("-----------------"+id.toString());
-            Book book = new Book(id,
+            Book book = new Book(
                     new Title("The Choice"),
                     new Author("Edith Eger"),
                     "Even in hell, hope can flower",

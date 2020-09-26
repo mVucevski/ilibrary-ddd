@@ -1,5 +1,6 @@
 package com.mvucevski.lendingmanagement.repository.loans;
 
+import com.mvucevski.lendingmanagement.domain.BookId;
 import com.mvucevski.lendingmanagement.domain.Loan;
 import com.mvucevski.lendingmanagement.domain.LoanId;
 import org.springframework.stereotype.Repository;
@@ -36,4 +37,11 @@ public class DbLoansRepository  implements LoansRepository{
         repository.deleteById(loanId);
         return true;
     }
+
+    @Override
+    public List<Loan> getAllLoansByBookId(BookId bookId) {
+        return repository.findLoansByBookId(bookId);
+    }
+
+
 }

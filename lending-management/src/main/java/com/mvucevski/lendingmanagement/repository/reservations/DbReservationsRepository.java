@@ -1,5 +1,6 @@
 package com.mvucevski.lendingmanagement.repository.reservations;
 
+import com.mvucevski.lendingmanagement.domain.BookId;
 import com.mvucevski.lendingmanagement.domain.Reservation;
 import com.mvucevski.lendingmanagement.domain.ReservationId;
 import org.springframework.stereotype.Repository;
@@ -35,5 +36,10 @@ public class DbReservationsRepository implements ReservationsRepository {
     public Boolean deleteReservation(ReservationId reservationId) {
         repository.deleteById(reservationId);
         return true;
+    }
+
+    @Override
+    public List<Reservation> getAllReservationsByBookId(BookId bookId) {
+        return repository.findReservationsByBookId(bookId);
     }
 }

@@ -14,9 +14,6 @@ import java.util.Date;
 @Getter
 public class Book extends AbstractEntity<BookId> {
 
-    @EmbeddedId
-    private BookId id;
-
     @Version
     private Long version;
 
@@ -47,10 +44,9 @@ public class Book extends AbstractEntity<BookId> {
     private LocalDateTime updatedAt;
 
 
-    public Book(BookId id, Title title, Author author, String description, Language language, Genre genre, int availableCopies,
+    public Book(Title title, Author author, String description, Language language, Genre genre, int availableCopies,
                 String coverUrl, LocalDate publicationDate) {
-        super(id);
-        this.id = id;
+        super(DomainObjectId.randomId(BookId.class));
         this.title = title;
         this.author = author;
         this.description = description;

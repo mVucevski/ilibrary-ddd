@@ -1,5 +1,7 @@
 package com.mvucevski.lendingmanagement.repository.reservations;
 
+import com.mvucevski.lendingmanagement.domain.BookId;
+import com.mvucevski.lendingmanagement.domain.Loan;
 import com.mvucevski.lendingmanagement.domain.Reservation;
 import com.mvucevski.lendingmanagement.domain.ReservationId;
 import org.springframework.stereotype.Repository;
@@ -17,5 +19,7 @@ public interface ReservationsRepository {
     Reservation saveReservation(Reservation Reservation);
 
     Boolean deleteReservation(ReservationId ReservationId);
+
+    List<Reservation> getAllReservationsByBookId(BookId bookId);
 
 }

@@ -1,5 +1,6 @@
 package com.mvucevski.lendingmanagement.repository.loans;
 
+import com.mvucevski.lendingmanagement.domain.BookId;
 import com.mvucevski.lendingmanagement.domain.Loan;
 import com.mvucevski.lendingmanagement.domain.LoanId;
 import org.springframework.stereotype.Repository;
@@ -17,5 +18,7 @@ public interface LoansRepository {
     Loan saveLoan(Loan loan);
 
     Boolean deleteLoan(LoanId loanId);
+
+    List<Loan> getAllLoansByBookId(BookId bookId);
 
 }

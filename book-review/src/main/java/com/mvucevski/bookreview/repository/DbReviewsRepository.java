@@ -1,5 +1,6 @@
 package com.mvucevski.bookreview.repository;
 
+import com.mvucevski.bookreview.domain.BookId;
 import com.mvucevski.bookreview.domain.Review;
 import com.mvucevski.bookreview.domain.ReviewId;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,5 +37,10 @@ public class DbReviewsRepository implements ReviewsRepository{
     public Boolean deleteReview(ReviewId reviewId) {
         repository.deleteById(reviewId);
         return true;
+    }
+
+    @Override
+    public List<Review> getAllReviewsByBookId(BookId bookId) {
+        return repository.findReviewsByBookId(bookId);
     }
 }

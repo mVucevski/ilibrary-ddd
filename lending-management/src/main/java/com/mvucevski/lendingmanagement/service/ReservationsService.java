@@ -1,9 +1,6 @@
 package com.mvucevski.lendingmanagement.service;
 
-import com.mvucevski.lendingmanagement.domain.Loan;
-import com.mvucevski.lendingmanagement.domain.LoanId;
-import com.mvucevski.lendingmanagement.domain.Reservation;
-import com.mvucevski.lendingmanagement.domain.ReservationId;
+import com.mvucevski.lendingmanagement.domain.*;
 import com.mvucevski.lendingmanagement.repository.loans.LoansRepository;
 import com.mvucevski.lendingmanagement.repository.reservations.ReservationsRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,7 +26,15 @@ public class ReservationsService {
         return repository.getReservationById(id);
     }
 
-    public Reservation saveReservation(Reservation id){
-        return repository.saveReservation(id);
+    public List<Reservation> getAllReservationsByBookId(BookId bookId){
+        return repository.getAllReservationsByBookId(bookId);
+    }
+
+    public Reservation createReservation(BookId bookId, UserId userId){
+        return repository.saveReservation(new Reservation(bookId, userId));
+    }
+
+    public Reservation saveReservation(Reservation reservation){
+        return repository.saveReservation(reservation);
     }
 }
