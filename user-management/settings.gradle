@@ -1,1 +1,3 @@
 rootProject.name = 'user-management'
+
+include ':shared-kernel'
