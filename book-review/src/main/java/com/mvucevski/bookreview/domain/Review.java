@@ -16,7 +16,6 @@ public class Review extends AbstractEntity<ReviewId> {
     @Embedded
     @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "book_id", nullable = false)))
     private BookId bookId;
-
     @Embedded
     @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false)))
     private UserId userId;
@@ -30,6 +29,9 @@ public class Review extends AbstractEntity<ReviewId> {
 
     @Column(columnDefinition = "TIMESTAMP", name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Review() {
+    }
 
     public Review(BookId bookId, UserId userId, int rating, String content) {
         super(ReviewId.randomId(ReviewId.class));

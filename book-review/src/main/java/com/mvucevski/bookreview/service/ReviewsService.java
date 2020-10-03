@@ -29,10 +29,25 @@ public class ReviewsService {
     }
 
     public Review creatReview(UserId userId, BookId bookId, int rating, String content){
-        return addReview(new Review(bookId, userId, rating, content));
+
+        return saveReview(repository.findReviewByBookIdAndUserId(bookId, userId)
+                .map(review1 -> {
+                    review1.setContent(content);
+                    review1.setRating(rating);
+                    return review1;
+                }).orElse(new Review(bookId, userId, rating, content)));
     }
 
-    public Review addReview(Review review){
+//    public Review updateReview(ReviewId reviewId, UserId userId, BookId bookId, int rating, String content){
+//
+//        Review review = repository.getReviewById(reviewId).orElse(new Review(bookId, userId, rating, content));
+//        review.setContent(content);
+//        review.setRating(rating);
+//
+//        return saveReview(review);
+//    }
+
+    public Review saveReview(Review review){
         return repository.saveReview(review);
     }
 

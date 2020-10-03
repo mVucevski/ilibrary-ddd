@@ -3,6 +3,7 @@ package com.mvucevski.bookreview.repository;
 import com.mvucevski.bookreview.domain.BookId;
 import com.mvucevski.bookreview.domain.Review;
 import com.mvucevski.bookreview.domain.ReviewId;
+import com.mvucevski.bookreview.domain.UserId;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ReviewsRepository {
     Boolean deleteReview(ReviewId reviewId);
 
     List<Review> getAllReviewsByBookId(BookId bookId);
+
+    Optional<Review> findReviewByBookIdAndUserId(BookId bookId, UserId userId);
 }

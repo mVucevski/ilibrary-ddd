@@ -6,13 +6,11 @@ import org.springframework.lang.NonNull;
 @Getter
 public class AddReviewRequest {
 
-    private String userId;
     private String bookId;
     private int rating;
     private String content;
 
-    public AddReviewRequest(String userId, String bookId, int rating, String content) {
-        this.userId = userId;
+    public AddReviewRequest(String bookId, int rating, String content) {
         this.bookId = bookId;
         this.rating = rating;
         this.content = content;

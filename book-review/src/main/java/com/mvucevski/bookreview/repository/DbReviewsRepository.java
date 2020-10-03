@@ -3,6 +3,7 @@ package com.mvucevski.bookreview.repository;
 import com.mvucevski.bookreview.domain.BookId;
 import com.mvucevski.bookreview.domain.Review;
 import com.mvucevski.bookreview.domain.ReviewId;
+import com.mvucevski.bookreview.domain.UserId;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -42,5 +43,10 @@ public class DbReviewsRepository implements ReviewsRepository{
     @Override
     public List<Review> getAllReviewsByBookId(BookId bookId) {
         return repository.findReviewsByBookId(bookId);
+    }
+
+    @Override
+    public Optional<Review> findReviewByBookIdAndUserId(BookId bookId, UserId userId) {
+        return repository.findReviewByBookIdAndUserId(bookId, userId);
     }
 }

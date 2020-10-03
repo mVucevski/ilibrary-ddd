@@ -1,5 +1,6 @@
 package com.mvucevski.usermanagement.api;
 
+import com.mvucevski.usermanagement.api.payload.AuthUserResponse;
 import com.mvucevski.usermanagement.api.payload.JWTLoginSuccessReponse;
 import com.mvucevski.usermanagement.api.payload.LoginRequest;
 import com.mvucevski.usermanagement.domain.User;
@@ -7,6 +8,7 @@ import com.mvucevski.usermanagement.security.JwtTokenProvider;
 import com.mvucevski.usermanagement.service.MapValidationErrorService;
 import com.mvucevski.usermanagement.service.UsersService;
 import com.mvucevski.usermanagement.validator.UserValidator;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -97,5 +99,20 @@ public class UsersController {
         System.out.println("INNN");
         boolean grantMem = usersService.grantMembership(username);
         return new ResponseEntity<String>("The user '" + username + "' successfully was granted membership.",HttpStatus.OK);
+    }
+
+    @GetMapping("/authUser")
+    public ResponseEntity<?> authUser(Principal principal){
+        if(principal==null){
+            return new ResponseEntity<String>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+        }
+        User user = usersService.getUser(principal.getName());
+
+        return new ResponseEntity<>(new AuthUserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getFullName(),
+                user.getMembershipExpirationDate(),
+                user.getRoles().stream().findFirst().get().getName()), HttpStatus.OK);
     }
 }

@@ -2,12 +2,14 @@ package com.mvucevski.bookreview.api;
 
 import com.mvucevski.bookreview.api.payload.AddReviewRequest;
 import com.mvucevski.bookreview.api.payload.AddReviewResponse;
-import com.mvucevski.bookreview.domain.BookId;
-import com.mvucevski.bookreview.domain.Review;
-import com.mvucevski.bookreview.domain.UserId;
+import com.mvucevski.bookreview.domain.*;
 import com.mvucevski.bookreview.service.ReviewsService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -26,12 +28,25 @@ public class ReviewsController {
     }
 
     @PostMapping
-    public AddReviewResponse addReview(@RequestBody AddReviewRequest request){
+    public ResponseEntity<?> addReview(@RequestBody AddReviewRequest request, @AuthenticationPrincipal User user){//Principal principal){
 
-        Review review = service.creatReview(new UserId(request.getUserId()), new BookId(request.getBookId()),
-                request.getRating(), request.getContent());
+        if(user==null){
+            return new ResponseEntity<String>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+        }
 
-        return new AddReviewResponse(review.getRating(), review.getContent());
+        Review review;
+
+            review = service.creatReview(user.getUserId(), new BookId(request.getBookId()),
+                    request.getRating(), request.getContent());
+
+
+        return new ResponseEntity<AddReviewResponse>(
+                new AddReviewResponse(
+                        review.id().getId(),
+                        review.getRating(),
+                        review.getContent()),
+                HttpStatus.OK);
     }
+
 
 }

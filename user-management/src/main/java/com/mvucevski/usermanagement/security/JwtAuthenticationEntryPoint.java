@@ -32,7 +32,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             response.getWriter().print(jsonExpiredToken);
         }else{
             //InvalidLoginResponse loginResponse = new InvalidLoginResponse();
-            RuntimeException loginResponse = new RuntimeException("Invali Login Resposne");
+            RuntimeException loginResponse = new RuntimeException("Invalid Login Response");
             String jsonLoginResponse = new Gson().toJson(loginResponse);
 
             response.setContentType("application/json");
