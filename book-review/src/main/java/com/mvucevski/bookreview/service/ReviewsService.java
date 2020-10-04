@@ -38,14 +38,6 @@ public class ReviewsService {
                 }).orElse(new Review(bookId, userId, rating, content)));
     }
 
-//    public Review updateReview(ReviewId reviewId, UserId userId, BookId bookId, int rating, String content){
-//
-//        Review review = repository.getReviewById(reviewId).orElse(new Review(bookId, userId, rating, content));
-//        review.setContent(content);
-//        review.setRating(rating);
-//
-//        return saveReview(review);
-//    }
 
     public Review saveReview(Review review){
         return repository.saveReview(review);

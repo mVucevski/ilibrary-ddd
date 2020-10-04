@@ -3,6 +3,7 @@ package com.mvucevski.usermanagement.service;
 import com.mvucevski.usermanagement.domain.Role;
 import com.mvucevski.usermanagement.domain.User;
 import com.mvucevski.usermanagement.domain.UserId;
+import com.mvucevski.usermanagement.exception.UsernameAlreadyExistsException;
 import com.mvucevski.usermanagement.repository.RolesRepository;
 import com.mvucevski.usermanagement.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -60,8 +61,7 @@ public class UsersService implements UserDetailsService {
             return usersRepository.saveUser(newUser);
 
         }catch(Exception ex){
-            //throw new UsernameAlreadyExistsException("Username '" + newUser.getUsername() + "' already exists");
-            throw new RuntimeException("Username '" + newUser.getUsername() + "' already exists");
+            throw new UsernameAlreadyExistsException("Username '" + newUser.getUsername() + "' already exists");
         }
     }
 
@@ -73,13 +73,11 @@ public class UsersService implements UserDetailsService {
         User user = loadUserByUsername(username);
 
         if(user == null){
-            //throw new UsernameAlreadyExistsException("The user with username: '" + username + "' doesn't exist!");
-            throw new RuntimeException("Username '" + username + "' doesn't exist!");
+            throw new UsernameAlreadyExistsException("The user with username: '" + username + "' doesn't exist!");
         }
 
         if(!user.isMemebershipExpired()){
-            //throw new UsernameAlreadyExistsException("User with username: '" + username + "' is already an active member!");
-            throw new RuntimeException("Username '" + username + "' s already an active member!");
+            throw new UsernameAlreadyExistsException("User with username: '" + username + "' is already an active member!");
         }
 
         user.setMembershipExpirationDate(LocalDateTime.now().plusYears(1));
