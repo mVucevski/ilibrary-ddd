@@ -4,6 +4,7 @@ import com.mvucevski.usermanagement.api.payload.AuthUserResponse;
 import com.mvucevski.usermanagement.api.payload.JWTLoginSuccessReponse;
 import com.mvucevski.usermanagement.api.payload.LoginRequest;
 import com.mvucevski.usermanagement.domain.User;
+import com.mvucevski.usermanagement.domain.UserId;
 import com.mvucevski.usermanagement.security.JwtTokenProvider;
 import com.mvucevski.usermanagement.service.MapValidationErrorService;
 import com.mvucevski.usermanagement.service.UsersService;
@@ -114,5 +115,12 @@ public class UsersController {
                 user.getFullName(),
                 user.isMemebershipExpired(),
                 user.getRoles().stream().findFirst().get().getName()), HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable String userId){
+        User user = usersService.loadUserById(new UserId(userId));
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

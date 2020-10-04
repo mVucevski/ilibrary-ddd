@@ -39,4 +39,11 @@ public class BooksController {
         Book newBook = booksService.saveOrUpdateBook(book);
         return new ResponseEntity<Book>(newBook, HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}/copiesLeft")
+    public ResponseEntity<?> getCopiesLeftByBookId(@PathVariable String id){
+        return booksService.getBookById(new BookId(id))
+                .map(book -> new ResponseEntity<>(book.getAvailableCopies(), HttpStatus.OK))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

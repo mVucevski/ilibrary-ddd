@@ -1,8 +1,6 @@
 package com.mvucevski.lendingmanagement.repository.loans;
 
-import com.mvucevski.lendingmanagement.domain.BookId;
-import com.mvucevski.lendingmanagement.domain.Loan;
-import com.mvucevski.lendingmanagement.domain.LoanId;
+import com.mvucevski.lendingmanagement.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +19,9 @@ public interface LoansRepository {
 
     List<Loan> getAllLoansByBookId(BookId bookId);
 
+    List<Loan> findLoansByUserId(UserId userId);
+
+    int countActiveLoansByUserId(UserId userId);
+
+    Optional<Loan> findLoanByUserIdAndBookId(UserId userId, BookId bookId);
 }

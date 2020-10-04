@@ -21,4 +21,6 @@ public interface ReservationsRepository {
 
     List<Reservation> findReservationsByUserId(UserId userId);
 
+    Optional<Reservation> getReservationByUserIdAndBookId(UserId userId, BookId bookId);
+
 }

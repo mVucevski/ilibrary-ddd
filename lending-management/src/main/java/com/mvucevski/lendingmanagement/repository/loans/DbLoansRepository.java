@@ -3,6 +3,7 @@ package com.mvucevski.lendingmanagement.repository.loans;
 import com.mvucevski.lendingmanagement.domain.BookId;
 import com.mvucevski.lendingmanagement.domain.Loan;
 import com.mvucevski.lendingmanagement.domain.LoanId;
+import com.mvucevski.lendingmanagement.domain.UserId;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,5 +44,18 @@ public class DbLoansRepository  implements LoansRepository{
         return repository.findLoansByBookId(bookId);
     }
 
+    @Override
+    public List<Loan> findLoansByUserId(UserId userId) {
+        return repository.findLoansByUserId(userId);
+    }
 
+    @Override
+    public int countActiveLoansByUserId(UserId userId) {
+        return repository.countLoansByUserIdAndReturned_AtIsNull(userId);
+    }
+
+    @Override
+    public Optional<Loan> findLoanByUserIdAndBookId(UserId userId, BookId bookId) {
+        return repository.findLoanByUserIdAndBookId(userId, bookId);
+    }
 }

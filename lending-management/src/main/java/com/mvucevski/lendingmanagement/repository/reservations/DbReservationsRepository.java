@@ -48,4 +48,9 @@ public class DbReservationsRepository implements ReservationsRepository {
     public List<Reservation> findReservationsByUserId(UserId userId) {
         return repository.findReservationsByUserId(userId);
     }
+
+    @Override
+    public Optional<Reservation> getReservationByUserIdAndBookId(UserId userId, BookId bookId) {
+        return repository.findReservationByUserIdAndBookId(userId, bookId);
+    }
 }

@@ -973,6 +973,7 @@ true posixrules
     </table>
     <table id="39" parent="21" name="loan">
       <ObjectId>33503</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
       <StateNumber>1401</StateNumber>
     </table>

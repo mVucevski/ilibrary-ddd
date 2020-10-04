@@ -31,7 +31,7 @@ public class Book extends AbstractEntity<BookId> {
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
-    private int availableCopies = 0;
+    private int availableCopies;
 
     private String coverUrl;
 
@@ -43,6 +43,7 @@ public class Book extends AbstractEntity<BookId> {
     @Column(columnDefinition = "TIMESTAMP", name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public Book(){}
 
     public Book(Title title, Author author, String description, Language language, Genre genre, int availableCopies,
                 String coverUrl, LocalDate publicationDate) {

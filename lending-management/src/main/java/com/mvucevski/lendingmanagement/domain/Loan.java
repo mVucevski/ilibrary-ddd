@@ -34,6 +34,9 @@ public class Loan extends AbstractEntity<LoanId> {
     @Column(columnDefinition = "TIMESTAMP", name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(columnDefinition = "TIMESTAMP", name = "returned_at")
+    private LocalDateTime returned_At;
+
     public Loan() {
     }
 
@@ -63,6 +66,9 @@ public class Loan extends AbstractEntity<LoanId> {
         this.userId = userId;
     }
 
+    public void setReturned_At(LocalDateTime returned_At) {
+        this.returned_At = returned_At;
+    }
 
     @PreUpdate
     protected void onUpdate(){
