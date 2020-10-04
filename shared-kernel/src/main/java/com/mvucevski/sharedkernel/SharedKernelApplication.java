@@ -9,5 +9,4 @@ public class SharedKernelApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SharedKernelApplication.class, args);
 	}
-
 }

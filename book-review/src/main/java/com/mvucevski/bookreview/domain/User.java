@@ -96,18 +96,18 @@ public class User {
 
     private String fullName;
 
-    private LocalDateTime membershipExpirationDate;
+    private boolean isMembershipExpired;
 
     private String role;
 
     public User() {
     }
 
-    public User(UserId userId, String username, String fullName, LocalDateTime membershipExpirationDate, String role) {
+    public User(UserId userId, String username, String fullName, boolean isMembershipExpired, String role) {
         this.userId = userId;
         this.username = username;
         this.fullName = fullName;
-        this.membershipExpirationDate = membershipExpirationDate;
+        this.isMembershipExpired = isMembershipExpired;
         this.role = role;
     }
 

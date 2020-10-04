@@ -3,6 +3,7 @@ package com.mvucevski.lendingmanagement.repository.reservations;
 import com.mvucevski.lendingmanagement.domain.BookId;
 import com.mvucevski.lendingmanagement.domain.Reservation;
 import com.mvucevski.lendingmanagement.domain.ReservationId;
+import com.mvucevski.lendingmanagement.domain.UserId;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,5 +42,10 @@ public class DbReservationsRepository implements ReservationsRepository {
     @Override
     public List<Reservation> getAllReservationsByBookId(BookId bookId) {
         return repository.findReservationsByBookId(bookId);
+    }
+
+    @Override
+    public List<Reservation> findReservationsByUserId(UserId userId) {
+        return repository.findReservationsByUserId(userId);
     }
 }

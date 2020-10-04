@@ -34,6 +34,9 @@ public class Loan extends AbstractEntity<LoanId> {
     @Column(columnDefinition = "TIMESTAMP", name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public Loan() {
+    }
+
     public Loan(BookId bookId, UserId userId) {
         super(LoanId.randomId(LoanId.class));
         this.bookId = bookId;

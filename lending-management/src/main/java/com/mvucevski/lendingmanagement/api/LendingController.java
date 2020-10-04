@@ -4,12 +4,13 @@ import com.mvucevski.lendingmanagement.api.payload.AddLoanRequest;
 import com.mvucevski.lendingmanagement.api.payload.AddLoanResponse;
 import com.mvucevski.lendingmanagement.api.payload.AddReservationRequest;
 import com.mvucevski.lendingmanagement.api.payload.AddReservationResponse;
-import com.mvucevski.lendingmanagement.domain.BookId;
-import com.mvucevski.lendingmanagement.domain.Loan;
-import com.mvucevski.lendingmanagement.domain.Reservation;
-import com.mvucevski.lendingmanagement.domain.UserId;
+import com.mvucevski.lendingmanagement.domain.*;
 import com.mvucevski.lendingmanagement.service.LoansService;
 import com.mvucevski.lendingmanagement.service.ReservationsService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,8 +37,11 @@ public class LendingController {
         return reservationsService.getAllReservationsByBookId(new BookId(bookId));
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/loans/{bookId}")
-    public AddLoanResponse addBookLoan(@PathVariable String bookId, @RequestBody AddLoanRequest request){
+    public AddLoanResponse addBookLoan(@PathVariable String bookId,
+                                       @RequestBody AddLoanRequest request){
+
         Loan loan = loansService.createLoan(new BookId(request.getBookId()), new UserId(request.getUserId()));
 
         return new AddLoanResponse(
@@ -47,13 +51,19 @@ public class LendingController {
                 loan.getDueDate());
     }
 
-    @PostMapping("/reservations/{bookId}")
-    public AddReservationResponse addBookReservation(@PathVariable String bookId, @RequestBody AddReservationRequest request){
-        Reservation reservation = reservationsService.createReservation(new BookId(request.getBookId()), new UserId(request.getUserId()));
+    @GetMapping("/reservations/{bookId}/create")
+    public ResponseEntity<?> addBookReservation(@PathVariable String bookId,
+                                                @AuthenticationPrincipal User user){
 
-        return new AddReservationResponse(
+        if(user==null){
+            return new ResponseEntity<String>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+        }
+
+        Reservation reservation = reservationsService.createReservation(new BookId(bookId), user);
+
+        return new ResponseEntity<>(new AddReservationResponse(
                 reservation.getBookId().getId(),
-                reservation.getEndsAt());
+                reservation.getEndsAt()), HttpStatus.OK);
     }
 
 

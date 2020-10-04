@@ -34,9 +34,7 @@ public class ReviewsController {
             return new ResponseEntity<String>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
         }
 
-        Review review;
-
-            review = service.creatReview(user.getUserId(), new BookId(request.getBookId()),
+        Review review = service.creatReview(user.getUserId(), new BookId(request.getBookId()),
                     request.getRating(), request.getContent());
 
 

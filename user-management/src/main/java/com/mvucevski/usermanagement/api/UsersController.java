@@ -112,7 +112,7 @@ public class UsersController {
                 user.getId(),
                 user.getUsername(),
                 user.getFullName(),
-                user.getMembershipExpirationDate(),
+                user.isMemebershipExpired(),
                 user.getRoles().stream().findFirst().get().getName()), HttpStatus.OK);
     }
 }
