@@ -1,14 +1,13 @@
 package com.mvucevski.bookreview;
 
-import com.mvucevski.bookreview.domain.BookId;
-import com.mvucevski.bookreview.domain.Review;
-import com.mvucevski.bookreview.domain.UserId;
+import com.mvucevski.bookreview.domain.model.BookId;
+import com.mvucevski.bookreview.domain.model.Review;
+import com.mvucevski.bookreview.domain.model.UserId;
 import com.mvucevski.bookreview.repository.DbReviewsRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 
 @Component
 public class DataGenerator {

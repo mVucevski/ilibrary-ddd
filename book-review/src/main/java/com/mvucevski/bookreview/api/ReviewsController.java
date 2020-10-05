@@ -2,14 +2,15 @@ package com.mvucevski.bookreview.api;
 
 import com.mvucevski.bookreview.api.payload.AddReviewRequest;
 import com.mvucevski.bookreview.api.payload.AddReviewResponse;
-import com.mvucevski.bookreview.domain.*;
+import com.mvucevski.bookreview.domain.model.BookId;
+import com.mvucevski.bookreview.domain.model.Review;
+import com.mvucevski.bookreview.domain.model.User;
 import com.mvucevski.bookreview.service.ReviewsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController

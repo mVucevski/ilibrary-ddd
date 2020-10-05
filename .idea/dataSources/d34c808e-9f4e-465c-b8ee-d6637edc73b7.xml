@@ -963,6 +963,7 @@ true posixrules
     <language id="36" parent="4" name="sql"/>
     <table id="37" parent="18" name="book">
       <ObjectId>33283</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
       <StateNumber>1310</StateNumber>
     </table>

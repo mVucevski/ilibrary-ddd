@@ -1,6 +1,6 @@
 package com.mvucevski.bookreview.security;
 
-import com.mvucevski.bookreview.domain.User;
+import com.mvucevski.bookreview.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.mvucevski.sharedkernel.utils.SecurityConstants.*;
 

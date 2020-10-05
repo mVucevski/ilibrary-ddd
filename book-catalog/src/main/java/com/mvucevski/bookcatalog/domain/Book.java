@@ -37,6 +37,12 @@ public class Book extends AbstractEntity<BookId> {
 
     private LocalDate publicationDate;
 
+    @Column(name = "rating")
+    private double rating;
+
+    @Column(name = "num_reviews")
+    private int numReviews;
+
     @Column(columnDefinition = "TIMESTAMP", name = "created_at", updatable = false)
     private final LocalDateTime createdAt = LocalDateTime.now();
 
@@ -56,6 +62,8 @@ public class Book extends AbstractEntity<BookId> {
         this.availableCopies = availableCopies;
         this.coverUrl = coverUrl;
         this.publicationDate = publicationDate;
+        this.rating = 0;
+        this.numReviews = 0;
     }
 
     @PreUpdate
@@ -85,6 +93,16 @@ public class Book extends AbstractEntity<BookId> {
 
     public void setAvailableCopies(int availableCopies) {
         this.availableCopies = availableCopies;
+    }
+
+    public void addReview(int newRating){
+        rating = (rating*numReviews + newRating) / (numReviews+1);
+        numReviews++;
+    }
+
+    public void editReview(int oldRating, int newRating){
+        double totalRating = (rating*numReviews - oldRating);
+        rating = (totalRating + newRating) / numReviews;
     }
 
     public void addCopies(int bookCopies){
