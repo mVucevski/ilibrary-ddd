@@ -1,6 +1,8 @@
 package com.mvucevski.lendingmanagement.service;
 
 import com.mvucevski.lendingmanagement.domain.*;
+import com.mvucevski.lendingmanagement.domain.event.LoanReturned;
+import com.mvucevski.lendingmanagement.domain.event.ReservationCreated;
 import com.mvucevski.lendingmanagement.exceptions.BookAvailableCopiesException;
 import com.mvucevski.lendingmanagement.exceptions.BookNotFoundException;
 import com.mvucevski.lendingmanagement.exceptions.ReservationsLoansLimitException;
@@ -8,14 +10,16 @@ import com.mvucevski.lendingmanagement.exceptions.UserMembershipException;
 import com.mvucevski.lendingmanagement.port.client.BookCatalogClient;
 import com.mvucevski.lendingmanagement.repository.loans.LoansRepository;
 import com.mvucevski.lendingmanagement.repository.reservations.ReservationsRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mvucevski.lendingmanagement.Constants.MAX_RESERVATIONS_PER_USER;
+import static com.mvucevski.lendingmanagement.Constants.*;
 
 @Service
 public class ReservationsService {
@@ -23,13 +27,16 @@ public class ReservationsService {
     private final ReservationsRepository repository;
     private BookCatalogClient bookCatalogClient;
     private LoansRepository loansRepository;
+    private RabbitTemplate rabbitTemplate;
 
     public ReservationsService(@Qualifier("dbReservationsRepository") ReservationsRepository repository,
                                BookCatalogClient bookCatalogClient,
-                               LoansRepository loansRepository) {
+                               LoansRepository loansRepository,
+                               RabbitTemplate rabbitTemplate) {
         this.repository = repository;
         this.bookCatalogClient = bookCatalogClient;
         this.loansRepository = loansRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public List<Reservation> getAllReservations(){
@@ -73,7 +80,30 @@ public class ReservationsService {
             throw new BookNotFoundException("Book with id: " + bookId.getId() + " doesn't exist!");
         }
 
-        return repository.saveReservation(new Reservation(bookId, user.getUserId()));
+        Reservation reservation = repository.saveReservation(new Reservation(bookId, user.getUserId()));
+
+        System.out.println("Reservation ADDED");
+        rabbitTemplate.convertAndSend(EXCHANGE_NAME, RESERVATION_CREATED_ROUTING_KEY, new ReservationCreated(bookId.getId(), Instant.now()));
+
+        return reservation;
+    }
+
+    public boolean removeReservation(ReservationId reservationId, UserId userId){
+        Optional<Reservation> reservationOpt = repository.getReservationById(reservationId);
+
+        if(reservationOpt.isPresent()){
+            Reservation reservation = reservationOpt.get();
+
+            if(reservation.getUserId().getId().equals(userId.getId())){
+                repository.deleteReservation(reservationId);
+                System.out.println("Reservation Removed");
+                rabbitTemplate.convertAndSend(EXCHANGE_NAME, LOAN_RETURNED_ROUTING_KEY, new LoanReturned(reservation.getBookId().getId(), Instant.now()));
+            }else{
+                System.out.println("User can't remove reservation of another user");
+                throw new BookNotFoundException("User can't remove reservation of another user");
+            }
+        }
+        return true;
     }
 
     public Reservation saveReservation(Reservation reservation){

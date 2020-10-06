@@ -18,6 +18,15 @@ public class RabbitMqConfig {
     public static final String BOOK_REVIEW_ADDED_ROUTING_KEY = "book_review_added";
     public static final String BOOK_REVIEW_EDITED_ROUTING_KEY = "book_review_edited";
 
+    public static final String LOAN_CREATED_PARSING_QUEUE = "loan_created";
+    public static final String RESERVATION_CREATED_PARSING_QUEUE = "reservation_created";
+    public static final String LOAN_CREATED_ROUTING_KEY = "loan_created";
+    public static final String RESERVATION_CREATED_ROUTING_KEY = "reservation_created";
+
+    public static final String LOAN_RETURNED_PARSING_QUEUE = "loan_returned";
+    public static final String LOAN_RETURNED_ROUTING_KEY = "loan_returned";
+
+
     @Bean
     Queue bookReviewAddedQueue() {
         return new Queue(BOOK_REVIEW_ADDED_PARSING_QUEUE);
@@ -26,6 +35,21 @@ public class RabbitMqConfig {
     @Bean
     Queue bookReviewEditedQueue() {
         return new Queue(BOOK_REVIEW_EDITED_PARSING_QUEUE);
+    }
+
+    @Bean
+    Queue loanCreatedQueue() {
+        return new Queue(LOAN_CREATED_PARSING_QUEUE);
+    }
+
+    @Bean
+    Queue reservationCreatedQueue() {
+        return new Queue(RESERVATION_CREATED_PARSING_QUEUE);
+    }
+
+    @Bean
+    Queue loanReturnedQueue() {
+        return new Queue(LOAN_RETURNED_PARSING_QUEUE);
     }
 
     @Bean
@@ -42,6 +66,22 @@ public class RabbitMqConfig {
     Binding bookReviewEditedBinding() {
         return BindingBuilder.bind(bookReviewEditedQueue()).to(exchange()).with(BOOK_REVIEW_EDITED_ROUTING_KEY);
     }
+
+    @Bean
+    Binding loanCreatedBinding() {
+        return BindingBuilder.bind(loanCreatedQueue()).to(exchange()).with(LOAN_CREATED_ROUTING_KEY);
+    }
+
+    @Bean
+    Binding reservationCreatedBinding() {
+        return BindingBuilder.bind(reservationCreatedQueue()).to(exchange()).with(RESERVATION_CREATED_ROUTING_KEY);
+    }
+
+    @Bean
+    Binding loanReturnedBinding() {
+        return BindingBuilder.bind(loanReturnedQueue()).to(exchange()).with(LOAN_RETURNED_ROUTING_KEY);
+    }
+
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {

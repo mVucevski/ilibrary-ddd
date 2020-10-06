@@ -2,7 +2,6 @@ package com.mvucevski.lendingmanagement.api;
 
 import com.mvucevski.lendingmanagement.api.payload.AddLoanRequest;
 import com.mvucevski.lendingmanagement.api.payload.AddLoanResponse;
-import com.mvucevski.lendingmanagement.api.payload.AddReservationRequest;
 import com.mvucevski.lendingmanagement.api.payload.AddReservationResponse;
 import com.mvucevski.lendingmanagement.domain.*;
 import com.mvucevski.lendingmanagement.service.LoansService;
@@ -64,6 +63,19 @@ public class LendingController {
         return new ResponseEntity<>(new AddReservationResponse(
                 reservation.getBookId().getId(),
                 reservation.getEndsAt()), HttpStatus.OK);
+    }
+
+    @GetMapping("/reservations/{reservationId}/remove")
+    public ResponseEntity<String> removeReservation(@PathVariable String reservationId,
+                                                    @AuthenticationPrincipal User user){
+
+        if(user==null){
+            return new ResponseEntity<String>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+        }
+
+        reservationsService.removeReservation(new ReservationId(reservationId), user.getUserId());
+
+        return new ResponseEntity<String>("OK", HttpStatus.OK);
     }
 
 

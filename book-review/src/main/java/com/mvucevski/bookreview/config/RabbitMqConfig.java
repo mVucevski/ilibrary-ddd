@@ -1,7 +1,5 @@
 package com.mvucevski.bookreview.config;
 
-
-import ch.qos.logback.classic.pattern.MessageConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

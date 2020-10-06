@@ -47,15 +47,20 @@ public class Loan extends AbstractEntity<LoanId> {
     }
 
     public Integer getFee() {
+        if(returned_At == null) {
+            calculateFee();
+        }
+        return fee;
+    }
+
+    private void calculateFee(){
         LocalDateTime dateNow = LocalDateTime.now();
 
-        if(dateNow.isAfter(dueDate)){
+        if (dateNow.isAfter(dueDate)) {
             long daysBetween = DAYS.between(dueDate, dateNow);
 
-            fee = (int)(daysBetween / 7) + 1;
+            fee = (int) (daysBetween / 7) + 1;
         }
-
-        return fee;
     }
 
     public void setBookId(BookId bookId) {
