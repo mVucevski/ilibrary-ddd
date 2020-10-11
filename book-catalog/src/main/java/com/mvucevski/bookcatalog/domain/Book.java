@@ -23,6 +23,9 @@ public class Book extends AbstractEntity<BookId> {
     @Embedded
     private Author author;
 
+    @Embedded
+    private ISBN isbn;
+
     private String description;
 
     @Enumerated(EnumType.STRING)

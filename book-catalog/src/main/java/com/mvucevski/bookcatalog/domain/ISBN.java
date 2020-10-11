@@ -7,12 +7,14 @@ import org.springframework.lang.NonNull;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Value
 public class ISBN implements ValueObject {
 
     private static final String VERY_SIMPLE_ISBN_CHECK = "^\\d{9}[\\d|X]$";
 
-    String isbn;
+    private String isbn;
+
+    public ISBN() {
+    }
 
     public ISBN(@NonNull String isbn) {
         if (!isbn.trim().matches(VERY_SIMPLE_ISBN_CHECK)) {
@@ -21,4 +23,7 @@ public class ISBN implements ValueObject {
         this.isbn = isbn.trim();
     }
 
+    public String getIsbn() {
+        return isbn;
+    }
 }

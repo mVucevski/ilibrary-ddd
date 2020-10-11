@@ -1,0 +1,153 @@
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.create-btn {
+  vertical-align: text-bottom !important;
+}
+
+.logo {
+  margin-right: -10px;
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+.Toptitle {
+  color: #35938b;
+  margin-top: 5px;
+}
+.navIcons {
+  font-size: 25px !important;
+  text-align: center;
+  color: #616161;
+}
+.navIcons:hover {
+  color: #35938b;
+}
+.hrNav {
+  margin: 0;
+  padding: 0;
+}
+.card-price {
+  color: #0caf5c;
+  font-weight: bold;
+}
+.card-img {
+  height: 124px !important;
+  width: 106px !important;
+  text-align: right;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+
+.card-Title {
+  /* autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /* autoprefixer: on */
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 16px;
+  max-height: 50px;
+  height: 50px;
+  -webkit-line-clamp: 3;
+  font-weight: bold;
+}
+
+.card-Author {
+  /* autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /* autoprefixer: on */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  max-height: 50px;
+  height: 50px;
+  -webkit-line-clamp: 2;
+}
+
+.star-ratings-sprite::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f005";
+  width: 110px;
+  display: inline-block;
+}
+
+.star-ratings-sprite-rating::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f005";
+  background-position: 0 100%;
+  height: 21px;
+  display: block;
+}
+
+.boja {
+  text-align: center;
+  color: white;
+  margin: 0 auto;
+}
+.table > tbody > tr > .emptyrow {
+  border-top: none;
+}
+
+.table > thead > tr > .emptyrow {
+  border-bottom: none;
+}
+
+.table > tbody > tr > .highrow {
+  border-top: 3px solid;
+}
+
+.cards-a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cards-a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cards-a a.cards-a:hover {
+  text-decoration: none;
+}
+
+.cards-a a.cards-a:hover {
+  text-decoration: none;
+}
+
+.card a.card:hover {
+  text-decoration: none;
+  color: inherit;
+}
+.checkOrder {
+  max-width: 200px;
+}
+
+.bookDetailsBorder {
+  border: 1px solid silver;
+  border-radius: 20px;
+  height: 400px;
+}
+
+.bookDetailsAvailable {
+  font-size: 25px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.center-block {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+}
+
+.my-card {
+  width: 140px !important;
+}

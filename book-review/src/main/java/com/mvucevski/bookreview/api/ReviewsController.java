@@ -2,6 +2,7 @@ package com.mvucevski.bookreview.api;
 
 import com.mvucevski.bookreview.api.payload.AddReviewRequest;
 import com.mvucevski.bookreview.api.payload.AddReviewResponse;
+import com.mvucevski.bookreview.api.payload.ReviewDTO;
 import com.mvucevski.bookreview.domain.model.BookId;
 import com.mvucevski.bookreview.domain.model.Review;
 import com.mvucevski.bookreview.domain.model.User;
@@ -12,8 +13,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/reviews")
 public class ReviewsController {
 
@@ -24,8 +27,9 @@ public class ReviewsController {
     }
 
     @GetMapping("/{bookId}")
-    public List<Review> getReviewsByBookId(@PathVariable String bookId){
-        return service.getAllReviewsByBookId(new BookId(bookId));
+    public List<ReviewDTO> getReviewsByBookId(@PathVariable String bookId){
+        return service.getAllReviewsByBookId(new BookId(bookId)).stream().map(e->
+                new ReviewDTO(e.getUserId().getId(), e.getContent(), e.getRating(), e.getCreatedAt().toLocalDate())).collect(Collectors.toList());
     }
 
     @PostMapping

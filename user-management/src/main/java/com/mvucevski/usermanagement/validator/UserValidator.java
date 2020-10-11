@@ -1,5 +1,6 @@
 package com.mvucevski.usermanagement.validator;
 
+import com.mvucevski.usermanagement.api.payload.RegisterRequest;
 import com.mvucevski.usermanagement.domain.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,19 +11,20 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return User.class.equals(clazz);
+        return RegisterRequest.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        User user = (User) target;
+        RegisterRequest request = (RegisterRequest) target;
 
-        if(user.getPassword().length() < 6){
+        if(request.getPassword().length() < 6){
             errors.rejectValue("password","Length", "Password must be at least 6 characters");
         }
 
-        if(!user.getPassword().equals(user.getConfirmPassword())){
+        if(!request.getPassword().equals(request.getConfirmPassword())){
             errors.rejectValue("confirmPassword", "Match", "Passwords must match");
         }
+
     }
 }

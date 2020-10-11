@@ -25,6 +25,7 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
 	implementation'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+	compile "commons-io:commons-io:2.6"
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'

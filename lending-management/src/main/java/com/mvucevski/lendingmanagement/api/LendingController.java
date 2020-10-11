@@ -1,8 +1,6 @@
 package com.mvucevski.lendingmanagement.api;
 
-import com.mvucevski.lendingmanagement.api.payload.AddLoanRequest;
-import com.mvucevski.lendingmanagement.api.payload.AddLoanResponse;
-import com.mvucevski.lendingmanagement.api.payload.AddReservationResponse;
+import com.mvucevski.lendingmanagement.api.payload.*;
 import com.mvucevski.lendingmanagement.domain.*;
 import com.mvucevski.lendingmanagement.service.LoansService;
 import com.mvucevski.lendingmanagement.service.ReservationsService;
@@ -13,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lending")
@@ -24,6 +23,19 @@ public class LendingController {
     public LendingController(LoansService loansService, ReservationsService reservationsService) {
         this.loansService = loansService;
         this.reservationsService = reservationsService;
+    }
+
+    @GetMapping("/{bookId}")
+    public BookLendingDTO getReservationsAndLoansByBookId(@PathVariable String bookId){
+        List<LoanDTO> loans = loansService.getAllLoansByBookId(new BookId(bookId)).stream()
+                .map(e->new LoanDTO(e.getBookId().getId(),
+                        e.getUserId().getId(), e.getDueDate(),
+                        e.getReturnedAt())).collect(Collectors.toList());
+
+        List<ReservationDTO> reservations = reservationsService.getAllReservationsByBookId(new BookId(bookId))
+                .stream().map(e->new ReservationDTO(e.getBookId().getId(), e.getUserId().getId(), e.getEndsAt())).collect(Collectors.toList());
+
+        return new BookLendingDTO(loans, reservations);
     }
 
     @GetMapping("/loans/{bookId}")

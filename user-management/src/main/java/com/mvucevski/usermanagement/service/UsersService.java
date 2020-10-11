@@ -65,6 +65,11 @@ public class UsersService implements UserDetailsService {
         }
     }
 
+    public User createUser(String username, String password, String fullName){
+        User user = new User(username, fullName, password);
+        return saveUser(user);
+    }
+
     public User getUser(String username){
         return loadUserByUsername(username);
     }

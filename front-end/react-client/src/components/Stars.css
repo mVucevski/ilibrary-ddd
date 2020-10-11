@@ -1,0 +1,51 @@
+.starrating > input {
+  display: none;
+} /* Remove radio buttons */
+
+.starrating > label:before {
+  margin: 2px;
+  font-size: 8em;
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+.starrating > label {
+  color: #222222; /* Start color when not clicked */
+}
+
+.starrating > input:checked ~ label {
+  color: #ffca08;
+} /* Set yellow color when star checked */
+
+.starrating > input:hover ~ label {
+  color: #ffca08;
+} /* Set yellow color when star hover */
+
+.star-col {
+  font-size: 30px;
+  margin-left: 5px;
+}
+
+.star-mine-empty::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f005";
+  display: inline-block;
+  font-weight: 400;
+  color: #ffca08;
+}
+
+.star-mine-full::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f005";
+  display: inline-block;
+  font-weight: 600;
+  color: #ffca08;
+}
+
+.star-mine-halfFull::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f5c0";
+  display: inline-block;
+  font-weight: 600;
+  color: #ffca08;
+}

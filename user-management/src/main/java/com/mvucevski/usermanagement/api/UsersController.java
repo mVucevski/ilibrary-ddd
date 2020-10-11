@@ -3,6 +3,7 @@ package com.mvucevski.usermanagement.api;
 import com.mvucevski.usermanagement.api.payload.AuthUserResponse;
 import com.mvucevski.usermanagement.api.payload.JWTLoginSuccessReponse;
 import com.mvucevski.usermanagement.api.payload.LoginRequest;
+import com.mvucevski.usermanagement.api.payload.RegisterRequest;
 import com.mvucevski.usermanagement.domain.User;
 import com.mvucevski.usermanagement.domain.UserId;
 import com.mvucevski.usermanagement.security.JwtTokenProvider;
@@ -31,6 +32,7 @@ import java.security.Principal;
 import static com.mvucevski.usermanagement.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/users")
 public class UsersController {
 
@@ -75,14 +77,14 @@ public class UsersController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest, BindingResult result){
 
-        userValidator.validate(user,result);
+        userValidator.validate(registerRequest,result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationErrorService(result);
         if(errorMap != null) return errorMap;
 
-        User newUser = usersService.saveUser(user);
+        User newUser = usersService.createUser(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getFullName());
 
         return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
     }

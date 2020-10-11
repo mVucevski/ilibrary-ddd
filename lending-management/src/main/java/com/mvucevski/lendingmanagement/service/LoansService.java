@@ -3,7 +3,6 @@ package com.mvucevski.lendingmanagement.service;
 import com.mvucevski.lendingmanagement.domain.*;
 import com.mvucevski.lendingmanagement.domain.event.LoanCreated;
 import com.mvucevski.lendingmanagement.domain.event.LoanReturned;
-import com.mvucevski.lendingmanagement.domain.event.ReservationCreated;
 import com.mvucevski.lendingmanagement.exceptions.*;
 import com.mvucevski.lendingmanagement.port.client.BookCatalogClient;
 import com.mvucevski.lendingmanagement.port.client.UserManagementClient;
@@ -92,7 +91,7 @@ public class LoansService {
         if(loanOpt.isPresent()){
             Loan loan = loanOpt.get();
 
-            loan.setReturned_At(LocalDateTime.now());
+            loan.setReturnedAt(LocalDateTime.now());
 
             loan = saveLoan(loan);
 
