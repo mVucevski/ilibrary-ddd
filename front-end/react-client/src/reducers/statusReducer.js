@@ -2,7 +2,9 @@ import { GET_LOAN, GET_MEMBERSHIP, GET_RESERVATIONS_AND_LOANS } from "../actions
 
 const initialState = {
   loan: {},
-  membership: ""
+  membership: "",
+  loans: [],
+  reservations: []
 };
 
 export default function(state = initialState, action) {
@@ -18,6 +20,7 @@ export default function(state = initialState, action) {
         membership: action.payload
       };
       case GET_RESERVATIONS_AND_LOANS:
+        console.log("GET_RESERVATIONS_AND_LOANS", action.payload);
         return {
           ...state,
           loans: action.payload.loans,

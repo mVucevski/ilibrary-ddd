@@ -14,6 +14,7 @@ import AddReview from "./BookReviews/AddReview";
 import StarRating from "./StarRating";
 import BookReviewsList from "./BookReviews/BookReviewsList";
 import { dateConverter } from "../../dateFormatter";
+import BookLendingTable from "./BookStatus/BookLendingTable"
 
 class BookDetails extends Component {
   constructor() {
@@ -192,9 +193,9 @@ class BookDetails extends Component {
                 loans={book.loans}
               />
             )}
+            { book.id &&<BookLendingTable id={book.id}></BookLendingTable>}
           </div>
           <hr />
-          {book.reservations && <BookReviewsList id={book.id} />}
           {/* {book.reservations && <BookReviewsList id={book.id} />} */}
           { book.id && <BookReviewsList id={book.id} />}
         </div>

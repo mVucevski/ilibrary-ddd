@@ -7,23 +7,23 @@ const BookStatusItem = props => {
   let type = "Reservation";
   let trColor = "table-warning";
 
-  let endDate = item.end_At;
+  let endDate = item.endsAt;
 
-  if (item.due_date) {
+  if (item.dueDate) {
     type = "Loan";
-    if (item.returned_At) {
+    if (item.returnedAt) {
       trColor = "table-success";
-      endDate = item.returned_At;
+      endDate = item.returnedAt;
     } else {
       trColor = "table-danger";
-      endDate = item.due_date;
+      endDate = item.dueDate;
     }
   }
 
   return (
     <tr className={trColor}>
       <td>{id}</td>
-      <td>{dateConverter(item.created_At)}</td>
+      <td>{dateConverter(item.createdAt)}</td>
       <td>{dateConverter(endDate)}</td>
       <td>{type}</td>
     </tr>

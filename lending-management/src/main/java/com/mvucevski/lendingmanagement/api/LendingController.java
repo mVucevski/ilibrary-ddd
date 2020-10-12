@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/lending")
 public class LendingController {
 
@@ -29,11 +30,11 @@ public class LendingController {
     public BookLendingDTO getReservationsAndLoansByBookId(@PathVariable String bookId){
         List<LoanDTO> loans = loansService.getAllLoansByBookId(new BookId(bookId)).stream()
                 .map(e->new LoanDTO(e.getBookId().getId(),
-                        e.getUserId().getId(), e.getDueDate(),
+                        e.getUserId().getId(), e.getDueDate(), e.getCreatedAt(),
                         e.getReturnedAt())).collect(Collectors.toList());
 
         List<ReservationDTO> reservations = reservationsService.getAllReservationsByBookId(new BookId(bookId))
-                .stream().map(e->new ReservationDTO(e.getBookId().getId(), e.getUserId().getId(), e.getEndsAt())).collect(Collectors.toList());
+                .stream().map(e->new ReservationDTO(e.getBookId().getId(), e.getUserId().getId(), e.getCreatedAt(), e.getEndsAt())).collect(Collectors.toList());
 
         return new BookLendingDTO(loans, reservations);
     }

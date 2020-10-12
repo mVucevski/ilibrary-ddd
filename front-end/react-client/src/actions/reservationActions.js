@@ -11,6 +11,7 @@ import { getBook } from "./bookActions";
 export const getReservationsAndLoans = (bookid) => async (dispatch) => {
   try {
     const response = await axios.get(`http://localhost:8082/api/lending/${bookid}`);
+
     dispatch({
       type: GET_RESERVATIONS_AND_LOANS,
       payload: response.data,

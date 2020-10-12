@@ -50,7 +50,7 @@ public class DbLoansRepository  implements LoansRepository{
     }
 
     @Override
-    public int countActiveLoansByUserId(UserId userId) {
+    public long countActiveLoansByUserId(UserId userId) {
         return repository.countLoansByUserIdAndReturned_AtIsNull(userId);
     }
 

@@ -18,8 +18,8 @@ public interface JpaLoansRepository extends JpaRepository<Loan, LoanId> {
 
     List<Loan> findLoansByUserId(UserId userId);
 
-    @Query("select count(l) from Loan l where l.userId = :userId and l.getReturnedAt is null")
-    int countLoansByUserIdAndReturned_AtIsNull(UserId userId);
+    @Query("select count(l) from Loan l where l.userId =: userId and l.returnedAt is null")
+    long countLoansByUserIdAndReturned_AtIsNull(UserId userId);
 
     Optional<Loan> findLoanByUserIdAndBookId(UserId userId, BookId bookId);
 }
