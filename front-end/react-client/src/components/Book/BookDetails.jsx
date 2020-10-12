@@ -15,6 +15,7 @@ import StarRating from "./StarRating";
 import BookReviewsList from "./BookReviews/BookReviewsList";
 import { dateConverter } from "../../dateFormatter";
 import BookLendingTable from "./BookStatus/BookLendingTable"
+import {getReservationsAndLoans} from "../../actions/reservationActions";
 
 class BookDetails extends Component {
   constructor() {
@@ -22,13 +23,15 @@ class BookDetails extends Component {
 
     this.state = {
       errors: {},
-      reserved: false
+      reserved: false,
+      activeUserReservationId: undefined
     };
   }
 
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.getBook(id, this.props.history);
+    this.props.getReservationsAndLoans(this.props.id);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,15 +39,39 @@ class BookDetails extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
-    const { book } = this.props.book;
-    const { user } = this.props.security;
+    console.log("BOOKDETALIS: componentWillReceiveProps ", nextProps);
 
-    if (book.reservations) {
-      this.setState({
-        reserved: book.reservations.some(
-          item => item.bookISBN === book.isbn && item.username === user.username
-        )
-      });
+    const { user } = this.props.security;
+    let reservations;
+
+    if(nextProps.status){
+      reservations = nextProps.status.reservations;
+    }else{
+      reservations = this.props.status.reservations;
+    }
+
+    
+
+    if (reservations) {
+
+      let reservation = reservations.find(
+        item => item.userId === user.id
+      )
+        
+        console.log("IN IF 1: ", reservation);
+
+      if(reservation){
+        this.setState({
+          reserved: true,
+          activeUserReservationId: reservation.reservationId
+        });
+      }else{
+        this.setState({
+          reserved: false
+        });
+      }
+
+     
     }
   }
 
@@ -54,16 +81,21 @@ class BookDetails extends Component {
 
   onReservIt() {
     if (this.state.reserved) {
-      this.props.removeReservation(this.state.reserved, this.props.book.book.id);
+      this.props.removeReservation(this.state.activeUserReservationId, this.props.book.book.id);
     } else {
       this.props.addReservation(this.props.book.book.id);
     }
+  }
+
+  isReserved(){
+    this.setState({reserved: true})
   }
 
   render() {
     const { id } = this.props.match.params;
     const { book } = this.props.book;
     const { errors } = this.state;
+    const { status } = this.props;
 
     let pageContent;
     let checkRes = false;
@@ -193,7 +225,7 @@ class BookDetails extends Component {
                 loans={book.loans}
               />
             )}
-            { book.id &&<BookLendingTable id={book.id}></BookLendingTable>}
+            { book.id &&<BookLendingTable id={book.id}  activeUser={this.props.security.user.id} status={status}></BookLendingTable>}
           </div>
           <hr />
           {/* {book.reservations && <BookReviewsList id={book.id} />} */}
@@ -211,6 +243,7 @@ BookDetails.propTypes = {
   getBook: PropTypes.func.isRequired,
   deleteBook: PropTypes.func.isRequired,
   addReservation: PropTypes.func.isRequired,
+  getReservationsAndLoans: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   security: PropTypes.object.isRequired
 };
@@ -218,10 +251,11 @@ BookDetails.propTypes = {
 const mapStateToProps = state => ({
   book: state.book,
   errors: state.errors,
-  security: state.security
+  security: state.security,
+  status: state.status
 });
 
 export default connect(
   mapStateToProps,
-  { getBook, deleteBook, addReservation, removeReservation }
+  { getBook, deleteBook, addReservation, removeReservation, getReservationsAndLoans }
 )(BookDetails);

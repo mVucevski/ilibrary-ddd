@@ -100,7 +100,7 @@ public class User extends AbstractEntity<UserId> implements UserDetails {
     }
 
     @Transient
-    public boolean isMemebershipExpired(){
+    public boolean isMembershipExpired(){
         if(membershipExpirationDate == null) return true;
 
         return LocalDateTime.now().isAfter(membershipExpirationDate);

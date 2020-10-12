@@ -7,13 +7,15 @@ import java.time.LocalDateTime;
 @Getter
 public class AddLoanResponse {
 
-    private String userId;
-    private String bookId;
-    private LocalDateTime createdAt;
-    private LocalDateTime dueDate;
+    private final String userId;
+    private final String userName;
+    private final String bookId;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime dueDate;
 
-    public AddLoanResponse(String userId, String bookId, LocalDateTime createdAt, LocalDateTime dueDate) {
+    public AddLoanResponse(String userId, String userName, String bookId, LocalDateTime createdAt, LocalDateTime dueDate) {
         this.userId = userId;
+        this.userName = userName;
         this.bookId = bookId;
         this.createdAt = createdAt;
         this.dueDate = dueDate;

@@ -4,6 +4,7 @@ import com.mvucevski.usermanagement.domain.Role;
 import com.mvucevski.usermanagement.domain.User;
 import com.mvucevski.usermanagement.domain.UserId;
 import com.mvucevski.usermanagement.exception.UsernameAlreadyExistsException;
+import com.mvucevski.usermanagement.exception.UsernameDoesntExistException;
 import com.mvucevski.usermanagement.repository.RolesRepository;
 import com.mvucevski.usermanagement.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,11 +35,11 @@ public class UsersService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usersRepository.findUserByUsername(username).orElseThrow(()->new UsernameNotFoundException("User " + username + " Not Found"));
+        return usersRepository.findUserByUsername(username).orElseThrow(()->new UsernameDoesntExistException("User " + username + " Not Found"));
     }
 
     public User loadUserById(UserId userId){
-        return usersRepository.findUserById(userId).orElseThrow(()->new UsernameNotFoundException("User wiht id " + userId.getId() + " Not Found"));
+        return usersRepository.findUserById(userId).orElseThrow(()->new UsernameDoesntExistException("User wiht id " + userId.getId() + " Not Found"));
     }
 
     public User saveUser(User newUser){
@@ -81,7 +82,7 @@ public class UsersService implements UserDetailsService {
             throw new UsernameAlreadyExistsException("The user with username: '" + username + "' doesn't exist!");
         }
 
-        if(!user.isMemebershipExpired()){
+        if(!user.isMembershipExpired()){
             throw new UsernameAlreadyExistsException("User with username: '" + username + "' is already an active member!");
         }
 

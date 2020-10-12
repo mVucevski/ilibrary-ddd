@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import BookStatusItem from "./BookStatusItem";
 
 class BookStatusTable extends Component {
+
   render() {
     const { reservations, loans } = this.props;
     let counter = 1;

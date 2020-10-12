@@ -8,7 +8,7 @@ const LoanTableItem = props => {
   let returned = <i className="fas fa-minus-square" />;
   let trColor = "table-warning";
 
-  if (item.returned_At) {
+  if (item.returnedAt) {
     trColor = "table-success";
     returned = <i className="fas fa-check-square" />;
   }
@@ -17,10 +17,10 @@ const LoanTableItem = props => {
     <tr className={trColor}>
       <td className="font-weight-bolder">{id}</td>
       <td className="font-weight-bolder">
-        <Link to={`/book/${item.bookISBN}`}>{item.bookISBN}</Link>
+        <Link to={`/book/${item.bookId}`}>{item.bookId}</Link>
       </td>
-      <td className="font-weight-bolder">{dateConverter(item.created_At)}</td>
-      <td className="font-weight-bolder">{dateConverter(item.due_date)}</td>
+      <td className="font-weight-bolder">{dateConverter(item.createdAt)}</td>
+      <td className="font-weight-bolder">{dateConverter(item.dueDate)}</td>
       <td className="font-weight-bolder">$ {item.fee}</td>
       <td className="font-weight-bolder ">{returned}</td>
       <td />

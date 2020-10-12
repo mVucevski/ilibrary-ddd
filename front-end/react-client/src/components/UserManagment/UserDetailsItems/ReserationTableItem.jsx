@@ -9,10 +9,10 @@ const ReservationTableItem = props => {
     <tr>
       <td className="font-weight-bolder">{id}</td>
       <td className="font-weight-bolder">
-        <Link to={`/book/${item.bookISBN}`}>{item.bookISBN}</Link>
+        <Link to={`/book/${item.bookId}`}>{item.bookId}</Link>
       </td>
-      <td className="font-weight-bolder">{dateConverter(item.created_At)}</td>
-      <td className="font-weight-bolder">{dateConverter(item.end_At)}</td>
+      <td className="font-weight-bolder">{dateConverter(item.createdAt)}</td>
+      <td className="font-weight-bolder">{dateConverter(item.endsAt)}</td>
       <td />
     </tr>
   );

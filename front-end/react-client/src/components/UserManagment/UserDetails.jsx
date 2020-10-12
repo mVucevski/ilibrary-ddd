@@ -6,10 +6,14 @@ import { Link } from "react-router-dom";
 import { getUserInfo } from "../../actions/securityActions";
 import ReseravtionsTable from "./UserDetailsItems/ReseravtionsTable";
 import { dateConverter } from "../../dateFormatter";
+import {getReservationsAndLoansForUser} from "../../actions/loanActions"
 
 class UserDetails extends Component {
   componentDidMount() {
+
+    const { user } = this.props.security;
     this.props.getUserInfo();
+    this.props.getReservationsAndLoansForUser(user.id);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -20,6 +24,7 @@ class UserDetails extends Component {
 
   render() {
     const { userInfo } = this.props.security;
+    const { loans, reservations } = this.props.status;
 
     let pageContent = "";
 
@@ -78,7 +83,7 @@ class UserDetails extends Component {
                 <h5 className="card-header">Loans</h5>
                 <div className="card-body">
                   <div className="row">
-                    {userInfo.loans && <LoansTable loans={userInfo.loans} />}
+                    {loans && <LoansTable loans={loans} />}
                   </div>
                 </div>
               </div>
@@ -91,8 +96,8 @@ class UserDetails extends Component {
                 <h5 className="card-header">Reservations</h5>
                 <div className="card-body">
                   <div className="row">
-                    {userInfo.reservations && (
-                      <ReseravtionsTable reservations={userInfo.reservations} />
+                    {reservations && (
+                      <ReseravtionsTable reservations={reservations} />
                     )}
                   </div>
                 </div>
@@ -109,15 +114,17 @@ class UserDetails extends Component {
 UserDetails.propTypes = {
   errors: PropTypes.object.isRequired,
   getUserInfo: PropTypes.func.isRequired,
-  security: PropTypes.object.isRequired
+  security: PropTypes.object.isRequired,
+  getReservationsAndLoansForUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   errors: state.errors,
-  security: state.security
+  security: state.security,
+  status: state.status
 });
 
 export default connect(
   mapStateToProps,
-  { getUserInfo }
+  { getUserInfo, getReservationsAndLoansForUser }
 )(UserDetails);

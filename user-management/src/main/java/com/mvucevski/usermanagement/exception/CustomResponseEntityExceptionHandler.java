@@ -19,6 +19,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler
+    public final ResponseEntity<Object> handleUsernameDoesntExistException(UsernameDoesntExistException ex, WebRequest request){
+        UsernameDoesntExistExceptionResponse exceptionResponse = new UsernameDoesntExistExceptionResponse(ex.getMessage());
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     public final ResponseEntity<Object> handleUserMembershipException(UserMembershipException ex, WebRequest request){
        UserMembershipExceptionResponse exceptionResponse = new UserMembershipExceptionResponse(ex.getMessage());
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);

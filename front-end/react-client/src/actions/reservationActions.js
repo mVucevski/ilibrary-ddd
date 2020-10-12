@@ -29,7 +29,7 @@ export const addReservation = id => async dispatch => {
     const response = await axios.get(`http://localhost:8082/api/lending/reservations/${id}/create`);
     //console.log("add Reservetion: ", response);
 
-    dispatch(getBook(id, "null"));
+    dispatch(getReservationsAndLoans(id));
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
@@ -42,7 +42,7 @@ export const removeReservation = (reseravtionId, bookId) => async dispatch => {
   try {
     await axios.delete(`http://localhost:8082/api/lending/reservations/${reseravtionId}/remove`);
 
-    dispatch(getBook(bookId, "null"));
+    dispatch(getReservationsAndLoans(bookId));
   } catch (error) {
     //console.log("Remove Reservation Error:", error.response.data);
     dispatch({

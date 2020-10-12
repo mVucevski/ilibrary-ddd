@@ -11,12 +11,12 @@ const ReseravtionsTable = props => {
   ));
 
   return (
-    <div className="col-md-9">
+    <div className="col-md-12">
       <table className="table table-sm">
         <thead>
           <tr>
             <th>#</th>
-            <th>ISBN</th>
+            <th>Book ID</th>
             <th>From (Date)</th>
             <th>To (Date)</th>
             <th />

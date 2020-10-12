@@ -31,10 +31,10 @@ public class LendingController {
         List<LoanDTO> loans = loansService.getAllLoansByBookId(new BookId(bookId)).stream()
                 .map(e->new LoanDTO(e.getBookId().getId(),
                         e.getUserId().getId(), e.getDueDate(), e.getCreatedAt(),
-                        e.getReturnedAt())).collect(Collectors.toList());
+                        e.getReturnedAt(), e.getFee())).collect(Collectors.toList());
 
         List<ReservationDTO> reservations = reservationsService.getAllReservationsByBookId(new BookId(bookId))
-                .stream().map(e->new ReservationDTO(e.getBookId().getId(), e.getUserId().getId(), e.getCreatedAt(), e.getEndsAt())).collect(Collectors.toList());
+                .stream().map(e->new ReservationDTO(e.getId().getId(),e.getBookId().getId(), e.getUserId().getId(), e.getCreatedAt(), e.getEndsAt())).collect(Collectors.toList());
 
         return new BookLendingDTO(loans, reservations);
     }
@@ -54,13 +54,23 @@ public class LendingController {
     public AddLoanResponse addBookLoan(@PathVariable String bookId,
                                        @RequestBody AddLoanRequest request){
 
-        Loan loan = loansService.createLoan(new BookId(request.getBookId()), new UserId(request.getUserId()));
+        Loan loan = loansService.createLoan(new BookId(request.getBookId()), request.getUsername());
 
         return new AddLoanResponse(
                 loan.getBookId().getId(),
+                request.getUsername(),
                 loan.getUserId().getId(),
                 loan.getCreatedAt(),
                 loan.getDueDate());
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @DeleteMapping("/loans/{bookId}/{username}")
+    public ResponseEntity<?> removeBookLoan(@PathVariable String bookId, @PathVariable String username){
+
+        Loan loan = loansService.endLoan(new BookId(bookId), username);
+
+        return new ResponseEntity<>("The loan for the book with ID: '" + bookId + "' was successfully returned.", HttpStatus.OK);
     }
 
     @GetMapping("/reservations/{bookId}/create")
@@ -78,7 +88,7 @@ public class LendingController {
                 reservation.getEndsAt()), HttpStatus.OK);
     }
 
-    @GetMapping("/reservations/{reservationId}/remove")
+    @DeleteMapping("/reservations/{reservationId}/remove")
     public ResponseEntity<String> removeReservation(@PathVariable String reservationId,
                                                     @AuthenticationPrincipal User user){
 
@@ -86,10 +96,22 @@ public class LendingController {
             return new ResponseEntity<String>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
         }
 
-        reservationsService.removeReservation(new ReservationId(reservationId), user.getUserId());
+        reservationsService.removeReservation(new ReservationId(reservationId), user.getId());
 
         return new ResponseEntity<String>("OK", HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userId}")
+    public BookLendingDTO getReservationsAndLoansByUserId(@PathVariable String userId){
+        List<LoanDTO> loans = loansService.getAllLoansByUserId(new UserId(userId)).stream()
+                .map(e->new LoanDTO(e.getBookId().getId(),
+                        e.getUserId().getId(), e.getDueDate(), e.getCreatedAt(),
+                        e.getReturnedAt(), e.getFee())).collect(Collectors.toList());
+
+        List<ReservationDTO> reservations = reservationsService.getAllReservationsByUserId(new UserId(userId))
+                .stream().map(e->new ReservationDTO(e.getId().getId(),e.getBookId().getId(), e.getUserId().getId(), e.getCreatedAt(), e.getEndsAt())).collect(Collectors.toList());
+
+        return new BookLendingDTO(loans, reservations);
+    }
 
 }

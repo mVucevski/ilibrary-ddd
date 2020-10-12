@@ -7,17 +7,19 @@ import {getReservationsAndLoans} from "../../../actions/reservationActions";
 class BookLendingTable extends Component {
 
   componentDidMount() {
-    console.log("Book id:", this.props.id);
+    // console.log("Book id:", this.props.id);
 
     this.props.getReservationsAndLoans(this.props.id);
 
-    console.log("THIS PROPS LENGIND MOUNT:", this.props);
+    // console.log("THIS PROPS LENGIND MOUNT:", this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+
+    console.log("LENGIND componentWillReceiveProps:", nextProps);
   }
 
   render() {
@@ -26,7 +28,15 @@ class BookLendingTable extends Component {
     const { reservations, loans } = this.props.status;
     let counter = 1;
 
-    console.log("LOANS", loans);
+    if(reservations){
+      if(this.props.status.reservations.some(
+        item => item.userId === this.props.activeUser
+      )){
+        //console.log("HAS RESERVATION:", this.props.reserved);
+        //this.props.isReserved();
+      }
+      
+    }
 
     if(loans){
       const statusResTable = reservations.map(r => (

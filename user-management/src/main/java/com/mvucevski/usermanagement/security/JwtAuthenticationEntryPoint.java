@@ -1,6 +1,8 @@
 package com.mvucevski.usermanagement.security;
 
 import com.google.gson.Gson;
+import com.mvucevski.usermanagement.exception.InvalidLoginResponse;
+import com.mvucevski.usermanagement.exception.UnauthorizedAccessResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -22,17 +24,16 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if (expired!=null){
             //response.sendError(HttpServletResponse.SC_UNAUTHORIZED,expired);
 
-            //TODO Fix this
-            //UnauthorizedAccessResponse expiredToken =  new UnauthorizedAccessResponse("Expired token");
-            RuntimeException expiredToken = new RuntimeException("Expired token");
+            UnauthorizedAccessResponse expiredToken =  new UnauthorizedAccessResponse("Expired token");
+            //RuntimeException expiredToken = new RuntimeException("Expired token");
             String jsonExpiredToken = new Gson().toJson(expiredToken);
 
             response.setContentType("application/json");
             response.setStatus(401);
             response.getWriter().print(jsonExpiredToken);
         }else{
-            //InvalidLoginResponse loginResponse = new InvalidLoginResponse();
-            RuntimeException loginResponse = new RuntimeException("Invalid Login Response");
+            InvalidLoginResponse loginResponse = new InvalidLoginResponse();
+            //RuntimeException loginResponse = new RuntimeException("Invalid Login Response");
             String jsonLoginResponse = new Gson().toJson(loginResponse);
 
             response.setContentType("application/json");

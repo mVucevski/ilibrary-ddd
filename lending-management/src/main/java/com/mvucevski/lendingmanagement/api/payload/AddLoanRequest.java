@@ -6,10 +6,10 @@ import lombok.Getter;
 public class AddLoanRequest {
 
     private String bookId;
-    private String userId;
+    private String username;
 
-    public AddLoanRequest(String bookId, String userId) {
+    public AddLoanRequest(String bookId, String username) {
         this.bookId = bookId;
-        this.userId = userId;
+        this.username = username;
     }
 }

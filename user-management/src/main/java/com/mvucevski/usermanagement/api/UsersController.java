@@ -1,9 +1,6 @@
 package com.mvucevski.usermanagement.api;
 
-import com.mvucevski.usermanagement.api.payload.AuthUserResponse;
-import com.mvucevski.usermanagement.api.payload.JWTLoginSuccessReponse;
-import com.mvucevski.usermanagement.api.payload.LoginRequest;
-import com.mvucevski.usermanagement.api.payload.RegisterRequest;
+import com.mvucevski.usermanagement.api.payload.*;
 import com.mvucevski.usermanagement.domain.User;
 import com.mvucevski.usermanagement.domain.UserId;
 import com.mvucevski.usermanagement.security.JwtTokenProvider;
@@ -111,18 +108,40 @@ public class UsersController {
         }
         User user = usersService.getUser(principal.getName());
 
-        return new ResponseEntity<>(new AuthUserResponse(
+        return new ResponseEntity<>(new UserDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getFullName(),
-                user.isMemebershipExpired(),
+                user.isMembershipExpired(),
                 user.getRoles().stream().findFirst().get().getName()), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable String userId){
         User user = usersService.loadUserById(new UserId(userId));
+        UserDTO userDTO = new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getFullName(),
+                user.isMembershipExpired(),
+                user.getRoles().stream().findFirst().get().getName());
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username){
+        User user = usersService.loadUserByUsername(username);
+        UserDTO userDTO = new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getFullName(),
+                user.isMembershipExpired(),
+                user.getRoles().stream().findFirst().get().getName());
+
+        return new ResponseEntity<>(
+                userDTO,
+                HttpStatus.OK);
     }
 }

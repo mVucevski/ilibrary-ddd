@@ -24,4 +24,6 @@ public interface LoansRepository {
     long countActiveLoansByUserId(UserId userId);
 
     Optional<Loan> findLoanByUserIdAndBookId(UserId userId, BookId bookId);
+
+    Optional<Loan> findActiveLoanByBookIdAndUserId(UserId userId, BookId bookId);
 }

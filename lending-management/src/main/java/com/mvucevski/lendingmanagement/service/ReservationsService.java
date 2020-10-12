@@ -53,11 +53,11 @@ public class ReservationsService {
 
     public Reservation createReservation(BookId bookId, User user){
 
-        if(user.isMembershipExpired()){
+        if(user.getIsMembershipExpired()){
             throw new UserMembershipException("Please start or renew your membership before making reservation!");
         }
 
-        List<Reservation> reservations = repository.findReservationsByUserId(user.getUserId());
+        List<Reservation> reservations = repository.findReservationsByUserId(user.getId());
 
         if(reservations.size() >= MAX_RESERVATIONS_PER_USER){
             System.out.println("You have reached the limit of active reservations!");
@@ -69,7 +69,7 @@ public class ReservationsService {
             throw new ReservationsLoansLimitException("You already have active reservation for this book");
         }
 
-        if(loansRepository.findLoanByUserIdAndBookId(user.getUserId(), bookId).isPresent()){
+        if(loansRepository.findLoanByUserIdAndBookId(user.getId(), bookId).isPresent()){
             throw new ReservationsLoansLimitException("You already have active loan for this book");
         }
 
@@ -80,7 +80,7 @@ public class ReservationsService {
             throw new BookNotFoundException("Book with id: " + bookId.getId() + " doesn't exist!");
         }
 
-        Reservation reservation = repository.saveReservation(new Reservation(bookId, user.getUserId()));
+        Reservation reservation = repository.saveReservation(new Reservation(bookId, user.getId()));
 
         System.out.println("Reservation ADDED");
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, RESERVATION_CREATED_ROUTING_KEY, new ReservationCreated(bookId.getId(), Instant.now()));
@@ -104,6 +104,10 @@ public class ReservationsService {
             }
         }
         return true;
+    }
+
+    public List<Reservation> getAllReservationsByUserId(UserId userId){
+        return repository.findReservationsByUserId(userId);
     }
 
     public Reservation saveReservation(Reservation reservation){

@@ -1,4 +1,5 @@
 import React from "react";
+import { dateConverter } from "../../dateFormatter";
 
 const LoanDetails = props => {
   console.log("PROPS:", props);
@@ -29,10 +30,10 @@ const LoanDetails = props => {
                   {props.username}
                 </div>
                 <div className="col-md-4" style={{ fontWeight: "bold" }}>
-                  {loan.bookISBN}
+                  {loan.bookId}
                 </div>
                 <div className="col-md-4" style={{ fontWeight: "bold" }}>
-                  {loan.due_date}
+                  {dateConverter(loan.dueDate)}
                 </div>
               </div>
             </div>

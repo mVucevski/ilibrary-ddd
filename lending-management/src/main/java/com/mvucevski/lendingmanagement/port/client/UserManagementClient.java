@@ -49,4 +49,16 @@ public class UserManagementClient implements UserManagement {
         }
 
     }
+
+    @Override
+    public User findByUsername(String username) {
+        try {
+            return restTemplate.exchange(uri().path("/api/users/username/"+username).build().toUri(), HttpMethod.GET, null,
+                    new ParameterizedTypeReference<User>() {
+                    }).getBody();
+        } catch (Exception ex) {
+            LOGGER.error("Error retrieving user by username", ex);
+            return null;
+        }
+    }
 }

@@ -47,23 +47,24 @@ public class LoansService {
         return loansRepository.getLoanById(loanId);
     }
 
-    public Loan createLoan(BookId bookId, UserId userId){
+    public Loan createLoan(BookId bookId, String userName){
 
+        User user = userManagementClient.findByUsername(userName);
 
-        if(loansRepository.findLoanByUserIdAndBookId(userId, bookId).isPresent()){
+        if(loansRepository.findActiveLoanByBookIdAndUserId(user.getId(), bookId).isPresent()){
             throw new LoanNotReturnedException("The user already has active loan for this book!");
         }
 
-        if(userManagementClient.findById(userId).isMembershipExpired()){
+        if(user.getIsMembershipExpired()){
             throw new UserMembershipException("Please start or renew your membership before making reservation!");
         }
 
 
-        if(loansRepository.countActiveLoansByUserId(userId) >= MAX_LOANS_PER_USER){
+        if(loansRepository.countActiveLoansByUserId(user.getId()) >= MAX_LOANS_PER_USER){
             throw new ReservationsLoansLimitException("\"You have reached the limit of active loans!");
         }
 
-       reservationsRepository.getReservationByUserIdAndBookId(userId, bookId)
+       reservationsRepository.getReservationByUserIdAndBookId(user.getId(), bookId)
                .ifPresent(e->{
                    reservationsRepository.deleteReservation(e.id());
                 });
@@ -76,7 +77,7 @@ public class LoansService {
         }
 
 
-        Loan loan = loansRepository.saveLoan(new Loan(bookId, userId));
+        Loan loan = loansRepository.saveLoan(new Loan(bookId, user.getId()));
         System.out.println("Loan ADDED");
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, LOAN_CREATED_ROUTING_KEY, new LoanCreated(bookId.getId(), Instant.now()));
 
@@ -84,9 +85,11 @@ public class LoansService {
         return loan;
     }
 
-    public Loan endLoan(LoanId loanId){
+    public Loan endLoan(BookId bookId, String userName){
 
-        Optional<Loan> loanOpt = loansRepository.getLoanById(loanId);
+        User user = userManagementClient.findByUsername(userName);
+
+        Optional<Loan> loanOpt = loansRepository.findActiveLoanByBookIdAndUserId(user.getId(), bookId);
 
         if(loanOpt.isPresent()){
             Loan loan = loanOpt.get();
@@ -100,9 +103,9 @@ public class LoansService {
 
             return loan;
         }else{
-            System.out.println("Loan with loanId: " + loanId + " doesn't exist");
+            System.out.println("Active Loan for book with id: " + bookId.getId() + " and User: " + userName + " doesn't exist");
             //TODO Change exception
-            throw new BookNotFoundException("Loan with loanId: " + loanId + " doesn't exist");
+            throw new BookNotFoundException("Active Loan for book with id: " + bookId.getId() + " and User: " + userName + " doesn't exist");
         }
 
     }
@@ -113,6 +116,10 @@ public class LoansService {
 
     public List<Loan> getAllLoansByBookId(BookId bookId){
         return loansRepository.getAllLoansByBookId(bookId);
+    }
+
+    public List<Loan> getAllLoansByUserId(UserId userId){
+        return loansRepository.findLoansByUserId(userId);
     }
 
 }

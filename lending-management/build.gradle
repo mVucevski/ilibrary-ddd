@@ -25,6 +25,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	implementation('org.springframework.boot:spring-boot-starter-amqp')
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
