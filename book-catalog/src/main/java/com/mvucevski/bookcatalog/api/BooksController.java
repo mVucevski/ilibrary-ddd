@@ -2,6 +2,7 @@ package com.mvucevski.bookcatalog.api;
 
 import com.mvucevski.bookcatalog.api.payload.BookDTO;
 import com.mvucevski.bookcatalog.api.payload.BookListItem;
+import com.mvucevski.bookcatalog.api.payload.CreateBookRequest;
 import com.mvucevski.bookcatalog.domain.Book;
 import com.mvucevski.bookcatalog.domain.BookId;
 import com.mvucevski.bookcatalog.service.BooksService;
@@ -66,10 +67,22 @@ public class BooksController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createNewBook(@RequestBody Book book) {
+    public ResponseEntity<?> createNewBook(@RequestBody CreateBookRequest request) {
 
-        Book newBook = booksService.saveOrUpdateBook(book);
-        return new ResponseEntity<Book>(newBook, HttpStatus.CREATED);
+        Book newBook = booksService.saveOrUpdateBook(request);
+
+        return new ResponseEntity<BookDTO>(
+                new BookDTO(newBook.getId().getId(),
+                        newBook.getTitle().getTitle(),
+                        newBook.getAuthor().getName(),
+                        newBook.getIsbn().getIsbn(),
+                        newBook.getDescription(),
+                        newBook.getLanguage().name(),
+                        newBook.getGenre().name(),
+                        newBook.getCoverUrl(),
+                        newBook.getAvailableCopies(),
+                        newBook.getPublicationDate(),
+                        newBook.getRating()), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}/copiesLeft")

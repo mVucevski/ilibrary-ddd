@@ -21,18 +21,5 @@ public class DataGenerator {
     @Transactional
     public void generateData(){
 
-        if(booksRepository.getAllBooks().isEmpty()){
-            Book book = new Book(
-                    new Title("The Choice"),
-                    new Author("Edith Eger"),
-                    "Even in hell, hope can flower",
-                    Language.English,
-                    Genre.NonFiction,
-                    3,
-                    "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501539010l/30753738.jpg",
-                    LocalDate.of(2019, 1, 28));
-
-        booksRepository.saveBook(book);
-        }
     }
 }

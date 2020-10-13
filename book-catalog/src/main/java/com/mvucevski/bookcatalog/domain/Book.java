@@ -54,12 +54,13 @@ public class Book extends AbstractEntity<BookId> {
 
     public Book(){}
 
-    public Book(Title title, Author author, String description, Language language, Genre genre, int availableCopies,
+    public Book(Title title, Author author, String description, ISBN isbn, Language language, Genre genre, int availableCopies,
                 String coverUrl, LocalDate publicationDate) {
         super(DomainObjectId.randomId(BookId.class));
         this.title = title;
         this.author = author;
         this.description = description;
+        this.isbn = isbn;
         this.language = language;
         this.genre = genre;
         this.availableCopies = availableCopies;
@@ -92,6 +93,10 @@ public class Book extends AbstractEntity<BookId> {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public void setIsbn(ISBN isbn) {
+        this.isbn = isbn;
     }
 
     public void setAvailableCopies(int availableCopies) {

@@ -12,7 +12,7 @@ class AddBook extends Component {
 
     this.state = {
       title: "",
-      authorName: "",
+      author: "",
       isbn: "",
       coverUrl: "",
       genre: "",
@@ -55,7 +55,7 @@ class AddBook extends Component {
 
     const newBook = {
       title: this.state.title,
-      authorName: this.state.authorName,
+      author: this.state.author,
       isbn: this.state.isbn,
       coverUrl: this.state.coverUrl.split("h\\")[1],
       genre: this.state.genre,
@@ -69,7 +69,7 @@ class AddBook extends Component {
     formData.append("file", this.state.imageFile);
 
     const res = axios
-      .post("http://localhost:8080/api/book/uploadImg", formData, {
+      .post("http://localhost:8081/api/books/uploadImg", formData, {
         headers: { "content-type": "multipart/form-data" }
       })
       .then(response => {
@@ -122,16 +122,16 @@ class AddBook extends Component {
                     <input
                       type="text"
                       className={classnames("form-control form-control-lg", {
-                        "is-invalid": errors.authorName
+                        "is-invalid": errors.author
                       })}
                       placeholder="Author's Name"
-                      name="authorName"
-                      value={this.state.authorName}
+                      name="author"
+                      value={this.state.author}
                       onChange={this.onChange}
                     />
-                    {errors.authorName && (
+                    {errors.author && (
                       <div className="invalid-feedback">
-                        {errors.authorName}
+                        {errors.author}
                       </div>
                     )}
                   </div>

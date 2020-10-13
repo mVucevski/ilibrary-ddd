@@ -12,7 +12,7 @@ class EditBook extends Component {
     this.state = {
       id: "",
       title: "",
-      authorName: "",
+      author: "",
       isbn: "",
       coverUrl: "",
       genre: "",
@@ -35,7 +35,7 @@ class EditBook extends Component {
     const {
       id,
       title,
-      authorName,
+      author,
       isbn,
       coverUrl,
       genre,
@@ -48,7 +48,7 @@ class EditBook extends Component {
     this.setState({
       id,
       title,
-      authorName,
+      author,
       isbn,
       coverUrl,
       genre,
@@ -73,7 +73,7 @@ class EditBook extends Component {
     const updatedBook = {
       id: this.state.id,
       title: this.state.title,
-      authorName: this.state.authorName,
+      author: this.state.author,
       isbn: this.state.isbn,
       coverUrl: this.state.coverUrl,
       genre: this.state.genre,
@@ -83,7 +83,7 @@ class EditBook extends Component {
       availableCopies: this.state.availableCopies
     };
 
-    this.props.updateBook(this.state.isbn, updatedBook, this.props.history);
+    this.props.updateBook(this.state.id, updatedBook, this.props.history);
   }
 
   render() {
@@ -119,16 +119,16 @@ class EditBook extends Component {
                       <input
                         type="text"
                         className={classnames("form-control form-control-lg", {
-                          "is-invalid": errors.authorName
+                          "is-invalid": errors.author
                         })}
                         placeholder="Author's Name"
-                        name="authorName"
-                        value={this.state.authorName}
+                        name="author"
+                        value={this.state.author}
                         onChange={this.onChange}
                       />
-                      {errors.authorName && (
+                      {errors.author && (
                         <div className="invalid-feedback">
-                          {errors.authorName}
+                          {errors.author}
                         </div>
                       )}
                     </div>

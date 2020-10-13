@@ -124,7 +124,7 @@ class BookDetails extends Component {
             Create Loan
           </Link>
           <Link
-            to={`/book/${book.isbn}/edit`}
+            to={`/book/${book.id}/edit`}
             className="btn btn-block btn-secondary"
           >
             Edit

@@ -64,7 +64,7 @@ export const getBook = (id, history) => async (dispatch) => {
 
 export const deleteBook = (isbn, history) => async (dispatch) => {
   if (window.confirm("Are you sure? This book will be deleted permanently!")) {
-    await axios.delete(`/api/book/${isbn}`);
+    await axios.delete(`http://localhost:8081/api/books/${isbn}`);
     dispatch({
       type: DELETE_BOOK,
       payload: isbn,
@@ -73,10 +73,10 @@ export const deleteBook = (isbn, history) => async (dispatch) => {
   }
 };
 
-export const updateBook = (isbn, updatedBook, history) => async (dispatch) => {
+export const updateBook = (id, updatedBook, history) => async (dispatch) => {
   try {
-    await axios.patch(`/api/book/${isbn}`, updatedBook);
-    history.push(`/book/${isbn}`);
+    await axios.post(`"http://localhost:8081/api/books"`, updatedBook);
+    history.push(`/book/${id}`);
     dispatch({
       type: GET_ERRORS,
       payload: {},

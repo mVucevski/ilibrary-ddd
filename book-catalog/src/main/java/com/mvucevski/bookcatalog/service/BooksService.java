@@ -1,8 +1,8 @@
 package com.mvucevski.bookcatalog.service;
 
+import com.mvucevski.bookcatalog.api.payload.CreateBookRequest;
 import com.mvucevski.bookcatalog.config.RabbitMqConfig;
-import com.mvucevski.bookcatalog.domain.Book;
-import com.mvucevski.bookcatalog.domain.BookId;
+import com.mvucevski.bookcatalog.domain.*;
 import com.mvucevski.bookcatalog.domain.event.*;
 import com.mvucevski.bookcatalog.repository.BooksRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -33,7 +33,48 @@ public class BooksService {
         return booksRepository.getBookById(bookId);
     }
 
-    public Book saveOrUpdateBook(Book book){
+    public Book updateBook(String bookId, Book updatedBook){
+        //TODO Fix exception
+        Book book = getBookById(new BookId(bookId)).orElseThrow(()-> new RuntimeException("Book with Id: " + updatedBook.getId().getId() + " doesn't exist."));
+
+        book.setAuthor(updatedBook.getAuthor());
+        book.setTitle(updatedBook.getTitle());
+        book.setAvailableCopies(updatedBook.getAvailableCopies());
+        book.setIsbn(book.getIsbn());
+        book.setCoverUrl(updatedBook.getCoverUrl());
+        book.setDescription(updatedBook.getDescription());
+        book.setGenre(updatedBook.getGenre());
+        book.setLanguage(updatedBook.getLanguage());
+        book.setPublicationDate(updatedBook.getPublicationDate());
+
+        return booksRepository.saveBook(book);
+
+    }
+
+    public Book saveOrUpdateBook(CreateBookRequest bookRequest){
+
+        Book book = new Book(new Title(bookRequest.getTitle()), new Author(bookRequest.getAuthor()),
+                bookRequest.getDescription(),
+                new ISBN(bookRequest.getIsbn()),
+                Language.valueOf(bookRequest.getLanguage()),
+                Genre.valueOf(bookRequest.getGenre()),
+                bookRequest.getAvailableCopies(),
+                bookRequest.getCoverUrl(),
+                bookRequest.getPublicationDate());;
+
+        if(book.getCoverUrl()==null || book.getCoverUrl().length() < 1){
+            book.setCoverUrl("https://d1w7fb2mkkr3kw.cloudfront.net/assets/images/book/lrg/9780/2410/9780241003435.jpg");
+        }
+
+        if(bookRequest.getId() == null){
+            return saveBook(book);
+        }else{
+            return updateBook(bookRequest.getId(), book);
+        }
+
+    }
+
+    private Book saveBook(Book book){
         return booksRepository.saveBook(book);
     }
 
@@ -46,7 +87,7 @@ public class BooksService {
         if(bookOpt.isPresent()){
             Book book = bookOpt.get();
             book.addReview(reviewAdded.rating());
-            saveOrUpdateBook(book);
+            saveBook(book);
         }
 
         // log.info("Received message, tip is: {}", message);
@@ -62,7 +103,7 @@ public class BooksService {
         if(bookOpt.isPresent()){
             Book book = bookOpt.get();
             book.editReview(reviewEdited.oldRating(), reviewEdited.newRating());
-            saveOrUpdateBook(book);
+            saveBook(book);
         }
         // log.info("Received message, tip is: {}", message);
     }
@@ -75,7 +116,7 @@ public class BooksService {
         if(bookOpt.isPresent()){
             Book book = bookOpt.get();
             book.subtractCopies(1);
-            saveOrUpdateBook(book);
+            saveBook(book);
             System.out.println("Book's copies -1 - reservation created");
         }else{
             System.out.println("Book doesnt exist");
@@ -91,7 +132,7 @@ public class BooksService {
         if(bookOpt.isPresent()){
             Book book = bookOpt.get();
             book.subtractCopies(1);
-            saveOrUpdateBook(book);
+            saveBook(book);
             System.out.println("Book's copies -1 - loan created");
         }else{
             System.out.println("Book doesnt exist");
@@ -107,7 +148,7 @@ public class BooksService {
         if(bookOpt.isPresent()){
             Book book = bookOpt.get();
             book.addCopies(1);
-            saveOrUpdateBook(book);
+            saveBook(book);
             System.out.println("Book's copies +1 - loan returned");
         }else{
             System.out.println("Book doesnt exist");
