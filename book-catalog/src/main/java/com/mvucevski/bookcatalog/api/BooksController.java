@@ -114,4 +114,49 @@ public class BooksController {
 
         return imagesService.getImage(name);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable String id){
+        booksService.removeBookById(new BookId(id));
+    }
+
+    @GetMapping("/search/{keyword}")
+    public List<BookDTO> searchBooks(@PathVariable String keyword) {
+        List<Book> books;
+
+        if (keyword == null) {
+            books =  booksService.getAllBooks();
+        }else {
+            books = booksService.searchBooks(keyword);
+        }
+
+        return books.stream().map(e->new BookDTO(e.getId().getId(),
+                e.getTitle().getTitle(),
+                e.getAuthor().getName(),
+                e.getIsbn().getIsbn(),
+                e.getDescription(),
+                e.getLanguage().name(),
+                e.getGenre().name(),
+                e.getCoverUrl(),
+                e.getAvailableCopies(),
+                e.getPublicationDate(),
+                e.getRating())).collect(Collectors.toList());
+    }
+
+    @GetMapping("/category/{genre}")
+    public List<BookDTO> getAllBooksByGenre(@PathVariable String genre) {
+
+        return booksService.findAllByGenre(genre)
+                .stream().map(e->new BookDTO(e.getId().getId(),
+                e.getTitle().getTitle(),
+                e.getAuthor().getName(),
+                e.getIsbn().getIsbn(),
+                e.getDescription(),
+                e.getLanguage().name(),
+                e.getGenre().name(),
+                e.getCoverUrl(),
+                e.getAvailableCopies(),
+                e.getPublicationDate(),
+                e.getRating())).collect(Collectors.toList());
+    }
 }

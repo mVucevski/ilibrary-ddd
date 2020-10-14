@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +77,28 @@ public class BooksService {
 
     private Book saveBook(Book book){
         return booksRepository.saveBook(book);
+    }
+
+    public void removeBookById(BookId bookId){
+        booksRepository.getBookById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book with Id: " + bookId.getId() + " doesn't exist."));
+
+        booksRepository.deleteBook(bookId);
+    }
+
+    public List<Book> searchBooks(String keyword){
+        if(keyword.equals("")){
+            return booksRepository.getAllBooks();
+        }
+        return booksRepository.searchBooks(keyword, keyword, keyword);
+    }
+
+    public List<Book> findAllByGenre(String genre){
+        if(genre == null && genre.length() == 0){
+            return new ArrayList<>();
+        }
+
+        return booksRepository.findAllByGenre(Genre.valueOf(genre));
     }
 
     @RabbitListener(queues = RabbitMqConfig.BOOK_REVIEW_ADDED_ROUTING_KEY)

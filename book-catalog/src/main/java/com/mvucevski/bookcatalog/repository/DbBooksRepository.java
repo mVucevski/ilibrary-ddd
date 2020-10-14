@@ -2,6 +2,7 @@ package com.mvucevski.bookcatalog.repository;
 
 import com.mvucevski.bookcatalog.domain.Book;
 import com.mvucevski.bookcatalog.domain.BookId;
+import com.mvucevski.bookcatalog.domain.Genre;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,5 +36,15 @@ public class DbBooksRepository implements BooksRepository{
     public Boolean deleteBook(BookId bookId) {
         repository.deleteById(bookId);
         return true;
+    }
+
+    @Override
+    public List<Book> searchBooks(String isbn, String title, String authorName) {
+        return repository.searchByTitleOrAuthorNameOrISBN(isbn, title, authorName);
+    }
+
+    @Override
+    public List<Book> findAllByGenre(Genre genre) {
+        return repository.findAllBooksByGenre(genre);
     }
 }

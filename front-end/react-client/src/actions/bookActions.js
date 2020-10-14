@@ -75,7 +75,7 @@ export const deleteBook = (isbn, history) => async (dispatch) => {
 
 export const updateBook = (id, updatedBook, history) => async (dispatch) => {
   try {
-    await axios.post(`"http://localhost:8081/api/books"`, updatedBook);
+    await axios.post("http://localhost:8081/api/books", updatedBook);
     history.push(`/book/${id}`);
     dispatch({
       type: GET_ERRORS,
@@ -125,7 +125,7 @@ export const searchBooks = (keyword) => async (dispatch) => {
     }
     console.log("SEARC:", keyword);
 
-    const response = await axios.get(`/api/book/search/${keyword}`);
+    const response = await axios.get(`http://localhost:8081/api/books/search/${keyword}`);
 
     dispatch({
       type: GET_BOOKS,
@@ -141,7 +141,7 @@ export const searchBooks = (keyword) => async (dispatch) => {
 
 export const getBooksByGenre = (keyword) => async (dispatch) => {
   try {
-    const response = await axios.get(`/api/book/category/${keyword}`);
+    const response = await axios.get(`http://localhost:8081/api/books/category/${keyword}`);
     dispatch({
       type: GET_BOOKS,
       payload: response.data,

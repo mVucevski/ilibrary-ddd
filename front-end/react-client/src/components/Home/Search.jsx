@@ -25,6 +25,7 @@ class Search extends Component {
         search: newProps.match.params.id
       });
       this.props.searchBooks(newProps.match.params.id);
+      
     }
   }
 
