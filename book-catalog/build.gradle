@@ -22,11 +22,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation('org.springframework.boot:spring-boot-starter-amqp')
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
 	implementation'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	compile "commons-io:commons-io:2.6"
 	compileOnly 'org.projectlombok:lombok'
+	compile "com.google.code.gson:gson:2.8.5"
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'

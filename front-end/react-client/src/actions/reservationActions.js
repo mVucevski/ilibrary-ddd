@@ -6,11 +6,12 @@ import {
   GET_RESERVATIONS_AND_LOANS,
   GET_ERRORS
 } from "./types";
-import { getBook } from "./bookActions";
+
+const path = "http://localhost:8082/api/lending";
 
 export const getReservationsAndLoans = (bookid) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:8082/api/lending/${bookid}`);
+    const response = await axios.get(`${path}/${bookid}`);
 
     dispatch({
       type: GET_RESERVATIONS_AND_LOANS,
@@ -26,8 +27,7 @@ export const getReservationsAndLoans = (bookid) => async (dispatch) => {
 
 export const addReservation = id => async dispatch => {
   try {
-    const response = await axios.get(`http://localhost:8082/api/lending/reservations/${id}/create`);
-    //console.log("add Reservetion: ", response);
+    const response = await axios.get(`${path}/reservations/${id}/create`);
 
     dispatch(getReservationsAndLoans(id));
   } catch (error) {
@@ -40,11 +40,10 @@ export const addReservation = id => async dispatch => {
 
 export const removeReservation = (reseravtionId, bookId) => async dispatch => {
   try {
-    await axios.delete(`http://localhost:8082/api/lending/reservations/${reseravtionId}/remove`);
+    await axios.delete(`${path}/reservations/${reseravtionId}/remove`);
 
     dispatch(getReservationsAndLoans(bookId));
   } catch (error) {
-    //console.log("Remove Reservation Error:", error.response.data);
     dispatch({
       type: GET_ERRORS,
       payload: error.response.data

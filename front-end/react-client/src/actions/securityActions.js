@@ -8,9 +8,11 @@ import {
 import setJWTToken from "../securityUtils/setJWTToken";
 import jwt_decode from "jwt-decode";
 
+const path = "http://localhost:8085/api/users"
+
 export const createNewUser = (newUser, history) => async (dispatch) => {
   try {
-    await axios.post("http://localhost:8085/api/users/register", newUser);
+    await axios.post(`${path}/register`, newUser);
     history.push("/login");
     dispatch({
       type: GET_ERRORS,
@@ -27,7 +29,7 @@ export const createNewUser = (newUser, history) => async (dispatch) => {
 export const login = (LoginRequest) => async (dispatch) => {
   try {
     const res = await axios.post(
-      "http://localhost:8085/api/users/login",
+      `${path}/login`,
       LoginRequest
     );
 
@@ -82,9 +84,9 @@ export const getUserInfo = (username) => async (dispatch) => {
   try {
     let response;
     if (username === undefined || username === "") {
-      response = await axios.get("http://localhost:8085/api/users/currentUser");
+      response = await axios.get(`${path}/currentUser`);
     } else {
-      response = await axios.get("http://localhost:8085/api/users/${username}");
+      response = await axios.get(`${path}/${username}`);
     }
     dispatch({
       type: GET_USER_INFO,

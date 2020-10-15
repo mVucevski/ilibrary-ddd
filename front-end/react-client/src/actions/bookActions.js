@@ -7,9 +7,11 @@ import {
   GET_REVIEWS,
 } from "./types";
 
+const path = "http://localhost:8081/api/books";
+
 export const addBook = (book, history) => async (dispatch) => {
   try {
-    const response = await axios.post("http://localhost:8081/api/books", book);
+    const response = await axios.post(path, book);
     history.push("/");
     dispatch({
       type: GET_ERRORS,
@@ -25,7 +27,7 @@ export const addBook = (book, history) => async (dispatch) => {
 
 export const getBooks = () => async (dispatch) => {
   try {
-    const response = await axios.get("http://localhost:8081/api/books");
+    const response = await axios.get(path);
 
     console.log("Get Books Response: ", response);
 
@@ -43,7 +45,7 @@ export const getBooks = () => async (dispatch) => {
 
 export const getBook = (id, history) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:8081/api/books/${id}`);
+    const response = await axios.get(`${path}/${id}`);
     dispatch({
       type: GET_BOOK,
       payload: response.data,
@@ -64,7 +66,7 @@ export const getBook = (id, history) => async (dispatch) => {
 
 export const deleteBook = (isbn, history) => async (dispatch) => {
   if (window.confirm("Are you sure? This book will be deleted permanently!")) {
-    await axios.delete(`http://localhost:8081/api/books/${isbn}`);
+    await axios.delete(`${path}/${isbn}`);
     dispatch({
       type: DELETE_BOOK,
       payload: isbn,
@@ -75,7 +77,7 @@ export const deleteBook = (isbn, history) => async (dispatch) => {
 
 export const updateBook = (id, updatedBook, history) => async (dispatch) => {
   try {
-    await axios.post("http://localhost:8081/api/books", updatedBook);
+    await axios.post(path, updatedBook);
     history.push(`/book/${id}`);
     dispatch({
       type: GET_ERRORS,
@@ -91,7 +93,7 @@ export const updateBook = (id, updatedBook, history) => async (dispatch) => {
 
 export const addReview = (id, review) => async (dispatch) => {
   try {
-    const response = await axios.post(`http://localhost:8083/api/reviews`, review);
+    const response = await axios.post(`${path}/reviews`, review);
 
     dispatch(getBook(id, "null"));
     dispatch(getReviews(id));
@@ -105,7 +107,7 @@ export const addReview = (id, review) => async (dispatch) => {
 
 export const getReviews = (id) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:8083/api/reviews/${id}`);
+    const response = await axios.get(`${path}/reviews/${id}`);
     dispatch({
       type: GET_REVIEWS,
       payload: response.data,
@@ -125,7 +127,7 @@ export const searchBooks = (keyword) => async (dispatch) => {
     }
     console.log("SEARC:", keyword);
 
-    const response = await axios.get(`http://localhost:8081/api/books/search/${keyword}`);
+    const response = await axios.get(`${path}/search/${keyword}`);
 
     dispatch({
       type: GET_BOOKS,
@@ -141,7 +143,7 @@ export const searchBooks = (keyword) => async (dispatch) => {
 
 export const getBooksByGenre = (keyword) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:8081/api/books/category/${keyword}`);
+    const response = await axios.get(`${path}/category/${keyword}`);
     dispatch({
       type: GET_BOOKS,
       payload: response.data,

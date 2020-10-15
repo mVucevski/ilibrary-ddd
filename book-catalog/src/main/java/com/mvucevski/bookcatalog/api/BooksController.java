@@ -10,6 +10,7 @@ import com.mvucevski.bookcatalog.service.ImagesService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +48,6 @@ public class BooksController {
                 )).collect(Collectors.toList());
     }
 
-    //TODO Return DTO instead of entity
     @GetMapping("/{id}")
     public ResponseEntity<?> getBookById(@PathVariable String id){
         return booksService.getBookById(new BookId(id))
@@ -66,6 +66,7 @@ public class BooksController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("")
     public ResponseEntity<?> createNewBook(@RequestBody CreateBookRequest request) {
 
@@ -85,6 +86,12 @@ public class BooksController {
                         newBook.getRating()), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable String id){
+        booksService.removeBookById(new BookId(id));
+    }
+
     @GetMapping("/{id}/copiesLeft")
     public ResponseEntity<?> getCopiesLeftByBookId(@PathVariable String id){
         return booksService.getBookById(new BookId(id))
@@ -92,6 +99,7 @@ public class BooksController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/uploadImg")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) throws Exception {
 
@@ -113,11 +121,6 @@ public class BooksController {
     byte[] getImageWithMediaType(@PathVariable String name) throws IOException {
 
         return imagesService.getImage(name);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable String id){
-        booksService.removeBookById(new BookId(id));
     }
 
     @GetMapping("/search/{keyword}")

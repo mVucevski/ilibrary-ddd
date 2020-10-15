@@ -1,9 +1,11 @@
 import axios from "axios";
 import { ADD_LOAN, GET_LOAN, GET_ERRORS, GET_MEMBERSHIP, GET_RESERVATIONS_AND_LOANS } from "./types";
 
+const path = "http://localhost:8082/api/lending";
+
 export const addLoan = (bookId, username) => async dispatch => {
   try {
-    const response = await axios.post(`http://localhost:8082/api/lending/loans/${bookId}`, {bookId: bookId, username: username});
+    const response = await axios.post(`${path}/loans/${bookId}`, {bookId: bookId, username: username});
 
     dispatch({
       type: GET_LOAN,
@@ -48,7 +50,7 @@ export const addMembership = username => async dispatch => {
 
 export const returnLoan = (bookId, username) => async dispatch => {
   try {
-    const response = await axios.delete(`http://localhost:8082/api/lending/loans/${bookId}/${username}`, {});
+    const response = await axios.delete(`${path}/loans/${bookId}/${username}`, {});
 
     dispatch({
       type: GET_MEMBERSHIP,
@@ -69,7 +71,7 @@ export const returnLoan = (bookId, username) => async dispatch => {
 
 export const getReservationsAndLoansForUser = (userId) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:8082/api/lending/user/${userId}`);
+    const response = await axios.get(`${path}/user/${userId}`);
 
     dispatch({
       type: GET_RESERVATIONS_AND_LOANS,
