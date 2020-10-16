@@ -63,4 +63,9 @@ public class DbLoansRepository  implements LoansRepository{
     public Optional<Loan> findActiveLoanByBookIdAndUserId(UserId userId, BookId bookId) {
         return repository.findActiveLoanByBookIdAndUserId(userId, bookId);
     }
+
+    @Override
+    public List<Loan> findAllByReturnedAtIsNull() {
+        return repository.findAllByReturnedAtIsNull();
+    }
 }

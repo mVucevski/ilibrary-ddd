@@ -26,4 +26,6 @@ public interface LoansRepository {
     Optional<Loan> findLoanByUserIdAndBookId(UserId userId, BookId bookId);
 
     Optional<Loan> findActiveLoanByBookIdAndUserId(UserId userId, BookId bookId);
+
+    List<Loan> findAllByReturnedAtIsNull();
 }

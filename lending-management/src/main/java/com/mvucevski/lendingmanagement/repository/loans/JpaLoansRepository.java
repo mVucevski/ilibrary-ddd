@@ -25,4 +25,7 @@ public interface JpaLoansRepository extends JpaRepository<Loan, LoanId> {
 
     @Query("select l from Loan l where l.userId = :userId and l.bookId = :bookId and l.returnedAt is null")
     Optional<Loan> findActiveLoanByBookIdAndUserId(UserId userId, BookId bookId);
+
+    //@Query("select l from Loan l where l.returnedAt is null")
+    List<Loan> findAllByReturnedAtIsNull();
 }

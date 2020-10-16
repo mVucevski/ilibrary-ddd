@@ -10,10 +10,12 @@ import com.mvucevski.lendingmanagement.repository.loans.LoansRepository;
 import com.mvucevski.lendingmanagement.repository.reservations.ReservationsRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,4 +124,28 @@ public class LoansService {
         return loansRepository.findLoansByUserId(userId);
     }
 
+    //@Scheduled(fixedRate = 10000)
+    @Scheduled(cron = "0 0 4 * * *", zone = "Europe/Skopje")
+    private void checkReminders(){
+        System.out.println("Reminder!");
+
+        List<Loan> loans = loansRepository.findAllByReturnedAtIsNull();
+
+        loans.stream().filter(e->e.getDueDate().isBefore(LocalDateTime.now().plusDays(3)))
+                .forEach(e-> {
+                    if(e.getDueDate().isAfter(LocalDateTime.now())){
+                        System.out.println("Send Email To User Id: " + e.getUserId());
+                        System.out.println("For Book Id: " + e.getBookId());
+                        System.out.println("Due Date: " + e.getDueDate());
+                        System.out.println("Message: " + "The due date for your loan is at " +
+                                e.getDueDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy 'at' hh:mm a")));
+                    }else{
+                        System.out.println("Send Email To User Id: " + e.getUserId());
+                        System.out.println("For Book Id: " + e.getBookId());
+                        System.out.println("Due Date: " + e.getDueDate());
+                        System.out.println("Fee: " + e.getFee());
+                        System.out.println("Message: " + "Your book loan is due, please return it as soon as you can, otherwise the fee will increases.");
+                    }
+                });
+    }
 }
