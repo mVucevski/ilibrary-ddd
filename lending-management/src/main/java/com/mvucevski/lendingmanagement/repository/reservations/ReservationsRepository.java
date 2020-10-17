@@ -3,6 +3,7 @@ package com.mvucevski.lendingmanagement.repository.reservations;
 import com.mvucevski.lendingmanagement.domain.*;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +23,7 @@ public interface ReservationsRepository {
     List<Reservation> findReservationsByUserId(UserId userId);
 
     Optional<Reservation> getReservationByUserIdAndBookId(UserId userId, BookId bookId);
+
+    List<Reservation> getReservationsByEndsAtBefore(LocalDateTime date);
 
 }

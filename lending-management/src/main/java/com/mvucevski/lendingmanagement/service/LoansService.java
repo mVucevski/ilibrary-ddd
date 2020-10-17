@@ -8,6 +8,8 @@ import com.mvucevski.lendingmanagement.port.client.BookCatalogClient;
 import com.mvucevski.lendingmanagement.port.client.UserManagementClient;
 import com.mvucevski.lendingmanagement.repository.loans.LoansRepository;
 import com.mvucevski.lendingmanagement.repository.reservations.ReservationsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,6 +31,7 @@ public class LoansService {
     private UserManagementClient userManagementClient;
     private BookCatalogClient bookCatalogClient;
     private RabbitTemplate rabbitTemplate;
+    private Logger logger;
 
     public LoansService(@Qualifier("dbLoansRepository") LoansRepository repository, ReservationsRepository reservationsRepository,
                         BookCatalogClient bookCatalogClient,
@@ -39,6 +42,7 @@ public class LoansService {
         this.bookCatalogClient = bookCatalogClient;
         this.reservationsRepository = reservationsRepository;
         this.rabbitTemplate = rabbitTemplate;
+        logger = LoggerFactory.getLogger(LoansService.class);
     }
 
     public List<Loan> getAllLoans(){
@@ -80,7 +84,7 @@ public class LoansService {
 
 
         Loan loan = loansRepository.saveLoan(new Loan(bookId, user.getId()));
-        System.out.println("Loan ADDED");
+        logger.info("Created loan with id: " + loan.getId().getId());
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, LOAN_CREATED_ROUTING_KEY, new LoanCreated(bookId.getId(), Instant.now()));
 
 
@@ -100,13 +104,13 @@ public class LoansService {
 
             loan = saveLoan(loan);
 
-            System.out.println("Loan Removed");
+            logger.info("Returned loan with id: " + loan.getId().getId());
             rabbitTemplate.convertAndSend(EXCHANGE_NAME, LOAN_RETURNED_ROUTING_KEY, new LoanReturned(loan.getBookId().getId(), Instant.now()));
 
             return loan;
         }else{
-            System.out.println("Active Loan for book with id: " + bookId.getId() + " and User: " + userName + " doesn't exist");
-            //TODO Change exception
+            logger.error("Active Loan for book with id: " + bookId.getId() + " and User: " + userName + " doesn't exist");
+
             throw new BookNotFoundException("Active Loan for book with id: " + bookId.getId() + " and User: " + userName + " doesn't exist");
         }
 
@@ -124,28 +128,4 @@ public class LoansService {
         return loansRepository.findLoansByUserId(userId);
     }
 
-    //@Scheduled(fixedRate = 10000)
-    @Scheduled(cron = "0 0 4 * * *", zone = "Europe/Skopje")
-    private void checkReminders(){
-        System.out.println("Reminder!");
-
-        List<Loan> loans = loansRepository.findAllByReturnedAtIsNull();
-
-        loans.stream().filter(e->e.getDueDate().isBefore(LocalDateTime.now().plusDays(3)))
-                .forEach(e-> {
-                    if(e.getDueDate().isAfter(LocalDateTime.now())){
-                        System.out.println("Send Email To User Id: " + e.getUserId());
-                        System.out.println("For Book Id: " + e.getBookId());
-                        System.out.println("Due Date: " + e.getDueDate());
-                        System.out.println("Message: " + "The due date for your loan is at " +
-                                e.getDueDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy 'at' hh:mm a")));
-                    }else{
-                        System.out.println("Send Email To User Id: " + e.getUserId());
-                        System.out.println("For Book Id: " + e.getBookId());
-                        System.out.println("Due Date: " + e.getDueDate());
-                        System.out.println("Fee: " + e.getFee());
-                        System.out.println("Message: " + "Your book loan is due, please return it as soon as you can, otherwise the fee will increases.");
-                    }
-                });
-    }
 }

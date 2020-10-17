@@ -19,13 +19,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         final String expired = (String) request.getAttribute("expired");
-        System.out.println("EDXXPR: " + expired);
 
         if (expired!=null){
-            //response.sendError(HttpServletResponse.SC_UNAUTHORIZED,expired);
-
             UnauthorizedAccessResponse expiredToken =  new UnauthorizedAccessResponse("Expired token");
-            //RuntimeException expiredToken = new RuntimeException("Expired token");
             String jsonExpiredToken = new Gson().toJson(expiredToken);
 
             response.setContentType("application/json");
@@ -33,13 +29,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             response.getWriter().print(jsonExpiredToken);
         }else{
             InvalidLoginResponse loginResponse = new InvalidLoginResponse();
-            //RuntimeException loginResponse = new RuntimeException("Invalid Login Response");
             String jsonLoginResponse = new Gson().toJson(loginResponse);
 
             response.setContentType("application/json");
             response.setStatus(401);
             response.getWriter().print(jsonLoginResponse);
-            //response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Invalid Login details");
         }
     }
 

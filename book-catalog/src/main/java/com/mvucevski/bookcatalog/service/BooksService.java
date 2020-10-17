@@ -4,7 +4,10 @@ import com.mvucevski.bookcatalog.api.payload.CreateBookRequest;
 import com.mvucevski.bookcatalog.config.RabbitMqConfig;
 import com.mvucevski.bookcatalog.domain.*;
 import com.mvucevski.bookcatalog.domain.event.*;
+import com.mvucevski.bookcatalog.exceptions.BookNotFoundException;
 import com.mvucevski.bookcatalog.repository.BooksRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,9 +22,11 @@ import java.util.Optional;
 public class BooksService {
 
     private final BooksRepository booksRepository;
+    private final Logger logger;
 
     public BooksService(@Qualifier("dbBooksRepository") BooksRepository booksRepository) {
         this.booksRepository = booksRepository;
+        logger = LoggerFactory.getLogger(BooksService.class);
     }
 
     public List<Book> getAllBooks(){
@@ -29,14 +34,11 @@ public class BooksService {
     }
 
     public Optional<Book> getBookById(BookId bookId){
-//        return booksRepository.getBookById(bookId)
-//                .orElseThrow(() -> new RuntimeException("Book with Id: " + bookId.getId() + " doesn't exist."));
         return booksRepository.getBookById(bookId);
     }
 
     public Book updateBook(String bookId, Book updatedBook){
-        //TODO Fix exception
-        Book book = getBookById(new BookId(bookId)).orElseThrow(()-> new RuntimeException("Book with Id: " + updatedBook.getId().getId() + " doesn't exist."));
+        Book book = getBookById(new BookId(bookId)).orElseThrow(()-> new BookNotFoundException("Book with Id: " + updatedBook.getId().getId() + " doesn't exist."));
 
         book.setAuthor(updatedBook.getAuthor());
         book.setTitle(updatedBook.getTitle());
@@ -49,7 +51,6 @@ public class BooksService {
         book.setPublicationDate(updatedBook.getPublicationDate());
 
         return booksRepository.saveBook(book);
-
     }
 
     public Book saveOrUpdateBook(CreateBookRequest bookRequest){
@@ -68,8 +69,10 @@ public class BooksService {
         }
 
         if(bookRequest.getId() == null){
+            logger.info("Saving book with id: " + book.getId().getId());
             return saveBook(book);
         }else{
+            logger.info("Updating book with id: " + book.getId().getId());
             return updateBook(bookRequest.getId(), book);
         }
 
@@ -94,7 +97,7 @@ public class BooksService {
     }
 
     public List<Book> findAllByGenre(String genre){
-        if(genre == null && genre.length() == 0){
+        if(genre == null || genre.length() == 0){
             return new ArrayList<>();
         }
 
@@ -103,8 +106,6 @@ public class BooksService {
 
     @RabbitListener(queues = RabbitMqConfig.BOOK_REVIEW_ADDED_ROUTING_KEY)
     public void consumeReviewAddedEvent(final ReviewAdded reviewAdded) {
-        System.out.println("ReviewAdded: " + reviewAdded.content());
-
         Optional<Book> bookOpt = booksRepository.getBookById(new BookId(reviewAdded.bookId()));
 
         if(bookOpt.isPresent()){
@@ -113,14 +114,11 @@ public class BooksService {
             saveBook(book);
         }
 
-        // log.info("Received message, tip is: {}", message);
+        logger.info("Consumed Review Added Event for book with id: " + reviewAdded.bookId());
     }
 
     @RabbitListener(queues = RabbitMqConfig.BOOK_REVIEW_EDITED_ROUTING_KEY)
-    public void consumeReviewAddedEvent(final ReviewEdited reviewEdited) {
-        System.out.println("ReviewEdited: " + reviewEdited.oldRating());
-        System.out.println("ReviewEdited new ratng: " + reviewEdited.newRating());
-
+    public void consumeReviewEditedEvent(final ReviewEdited reviewEdited) {
         Optional<Book> bookOpt = booksRepository.getBookById(new BookId(reviewEdited.bookId()));
 
         if(bookOpt.isPresent()){
@@ -128,7 +126,7 @@ public class BooksService {
             book.editReview(reviewEdited.oldRating(), reviewEdited.newRating());
             saveBook(book);
         }
-        // log.info("Received message, tip is: {}", message);
+        logger.info("Consumed Review Edited Event for book with id: " + reviewEdited.bookId());
     }
 
     @RabbitListener(queues = RabbitMqConfig.RESERVATION_CREATED_ROUTING_KEY)
@@ -140,15 +138,14 @@ public class BooksService {
             Book book = bookOpt.get();
             book.subtractCopies(1);
             saveBook(book);
-            System.out.println("Book's copies -1 - reservation created");
+            logger.info("Consumed Reservation Created Event for book with id: " + reservationCreated.bookId());
         }else{
-            System.out.println("Book doesnt exist");
+            logger.error("Consumed Reservation Created Event but book doesn't exist with id: " + reservationCreated.bookId());
         }
-        // log.info("Received message, tip is: {}", message);
     }
 
     @RabbitListener(queues = RabbitMqConfig.LOAN_CREATED_ROUTING_KEY)
-    public void consumeReservationCreatedEvent(final LoanCreated loanCreated) {
+    public void consumeLoanCreatedEvent(final LoanCreated loanCreated) {
 
         Optional<Book> bookOpt = booksRepository.getBookById(new BookId(loanCreated.bookId()));
 
@@ -156,11 +153,10 @@ public class BooksService {
             Book book = bookOpt.get();
             book.subtractCopies(1);
             saveBook(book);
-            System.out.println("Book's copies -1 - loan created");
+            logger.info("Consumed Loan Created Event for book with id: " + loanCreated.bookId());
         }else{
-            System.out.println("Book doesnt exist");
+            logger.error("Consumed Loan Created Event but book doesn't exist with id: " + loanCreated.bookId());
         }
-        // log.info("Received message, tip is: {}", message);
     }
 
     @RabbitListener(queues = RabbitMqConfig.LOAN_RETURNED_ROUTING_KEY)
@@ -172,10 +168,9 @@ public class BooksService {
             Book book = bookOpt.get();
             book.addCopies(1);
             saveBook(book);
-            System.out.println("Book's copies +1 - loan returned");
+            logger.info("Consumed Loan Returned Event for book with id: " + loanReturned.bookId());
         }else{
-            System.out.println("Book doesnt exist");
+            logger.error("Consumed Loan Returned Event but book doesn't exist with id: " + loanReturned.bookId());
         }
-        // log.info("Received message, tip is: {}", message);
     }
 }

@@ -7,6 +7,8 @@ import com.mvucevski.usermanagement.exception.UsernameAlreadyExistsException;
 import com.mvucevski.usermanagement.exception.UsernameDoesntExistException;
 import com.mvucevski.usermanagement.repository.RolesRepository;
 import com.mvucevski.usermanagement.repository.UsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,6 +26,7 @@ public class UsersService implements UserDetailsService {
     private final UsersRepository usersRepository;
     private final RolesRepository rolesRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private Logger logger;
 
     public UsersService(@Qualifier("dbUsersRepository") UsersRepository repository,
                         RolesRepository rolesRepository,
@@ -31,6 +34,7 @@ public class UsersService implements UserDetailsService {
         this.usersRepository = repository;
         this.rolesRepository = rolesRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        logger = LoggerFactory.getLogger(UsersService.class);
     }
 
     @Override
@@ -59,9 +63,11 @@ public class UsersService implements UserDetailsService {
                 newUser.setRoles(Stream.of(role).collect(Collectors.toSet()));
             }
 
+            logger.info("Saving User with id: " + newUser.getId());
             return usersRepository.saveUser(newUser);
 
         }catch(Exception ex){
+            logger.error("Can't save user with id: " + newUser.getId() + " because it already exists.");
             throw new UsernameAlreadyExistsException("Username '" + newUser.getUsername() + "' already exists");
         }
     }
@@ -88,6 +94,7 @@ public class UsersService implements UserDetailsService {
 
         user.setMembershipExpirationDate(LocalDateTime.now().plusYears(1));
         usersRepository.saveUser(user);
+        logger.info("Granting membership to User with id: " + user.getId());
 
         return true;
     }

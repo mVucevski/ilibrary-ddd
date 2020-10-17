@@ -7,6 +7,8 @@ import com.mvucevski.bookreview.domain.model.Review;
 import com.mvucevski.bookreview.domain.model.ReviewId;
 import com.mvucevski.bookreview.domain.model.UserId;
 import com.mvucevski.bookreview.repository.ReviewsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,13 @@ public class ReviewsService {
 
     private final ReviewsRepository repository;
     private final RabbitTemplate rabbitTemplate;
-
+    private final Logger logger;
 
     public ReviewsService(@Qualifier("dbReviewsRepository") ReviewsRepository repository,
                           RabbitTemplate rabbitTemplate) {
         this.repository = repository;
         this.rabbitTemplate = rabbitTemplate;
+        logger = LoggerFactory.getLogger(ReviewsService.class);
     }
 
     public List<Review> getAllReviews(){
@@ -62,23 +65,14 @@ public class ReviewsService {
             }
 
             if(oldRating!=-1){
-                System.out.println("REVIEWED EDIT");
+                logger.info("Edited review with id: " + savedReview.getId().getId());
                 rabbitTemplate.convertAndSend(EXCHANGE_NAME, BOOK_REVIEW_EDITED_ROUTING_KEY, new ReviewEdited(bookId.getId(), content, oldContent, rating, oldRating, Instant.now()));
             }else{
-                System.out.println("REVIEWED ADDED");
+                logger.info("Added review with id: " + savedReview.getId().getId());
                 rabbitTemplate.convertAndSend(EXCHANGE_NAME, BOOK_REVIEW_ADDED_ROUTING_KEY, new ReviewAdded(bookId.getId(), content, rating, Instant.now()));
             }
 
-            //TODO Logger Save Review
             return savedReview;
-//        }catch (Exception ex){
-//            System.out.println("Something went from with saving review");
-//            //TODO Error Logger
-//            System.out.println(ex.getMessage());
-//            ex.getStackTrace();
-//            throw new RuntimeException("Something went from with saving review");
-//        }
-
     }
 
     public Review saveReview(Review review){

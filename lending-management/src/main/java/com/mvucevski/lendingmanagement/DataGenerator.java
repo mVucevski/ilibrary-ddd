@@ -27,17 +27,5 @@ public class DataGenerator {
     @Transactional
     public void generateData(){
 
-        //User user = userManagementClient.findByUsername("bojan@bojan.com");
-
-
-        //int x = 1 + 2;
-//       if(loansRepository.getAllLoans().isEmpty()){
-//           loansRepository.saveLoan(
-//                   new Loan(new BookId("7c997e8b-ea90-4be9-8487-ca35251af2ec"),  new UserId("0")));
-//       }
-//
-//       if(reservationsRepository.getAllReservations().isEmpty()){
-//          reservationsRepository.saveReservation( new Reservation(new BookId("7c997e8b-ea90-4be9-8487-ca35251af2ec"),  new UserId("1")));
-//       }
     }
 }

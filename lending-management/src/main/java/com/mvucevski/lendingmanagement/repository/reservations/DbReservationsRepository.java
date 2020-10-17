@@ -6,6 +6,7 @@ import com.mvucevski.lendingmanagement.domain.ReservationId;
 import com.mvucevski.lendingmanagement.domain.UserId;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,5 +53,10 @@ public class DbReservationsRepository implements ReservationsRepository {
     @Override
     public Optional<Reservation> getReservationByUserIdAndBookId(UserId userId, BookId bookId) {
         return repository.findReservationByUserIdAndBookId(userId, bookId);
+    }
+
+    @Override
+    public List<Reservation> getReservationsByEndsAtBefore(LocalDateTime date) {
+        return repository.findReservationsByEndsAtBefore(date);
     }
 }

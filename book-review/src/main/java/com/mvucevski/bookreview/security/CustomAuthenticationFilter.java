@@ -40,12 +40,9 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(jwt);
-            HttpEntity <String> entity = new HttpEntity<String>(headers);
+            HttpEntity<String> entity = new HttpEntity<String>(headers);
 
             User user = restTemplate.exchange(AUTH_PATH, HttpMethod.GET, entity, User.class).getBody();
-
-//            System.out.println(user.getUsername());
-//            System.out.println(user.getRole());
 
             //User Roles
             Collection<? extends GrantedAuthority> userRoles = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
@@ -56,19 +53,18 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        }catch(Exception ex){
-            //logger.error("Could not set user authentication in security context", ex);
+        } catch (Exception ex) {
             logger.error("Could not set user authentication in security context");
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
-    private String getJWTFromRequest(HttpServletRequest request){
+    private String getJWTFromRequest(HttpServletRequest request) {
 
         String bearerToken = request.getHeader(HEADER_STRING);
 
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)){
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
             return bearerToken.substring(7);
         }
         return null;

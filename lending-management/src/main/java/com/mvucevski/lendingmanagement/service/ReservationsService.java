@@ -10,6 +10,8 @@ import com.mvucevski.lendingmanagement.exceptions.UserMembershipException;
 import com.mvucevski.lendingmanagement.port.client.BookCatalogClient;
 import com.mvucevski.lendingmanagement.repository.loans.LoansRepository;
 import com.mvucevski.lendingmanagement.repository.reservations.ReservationsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class ReservationsService {
     private BookCatalogClient bookCatalogClient;
     private LoansRepository loansRepository;
     private RabbitTemplate rabbitTemplate;
+    private Logger logger;
 
     public ReservationsService(@Qualifier("dbReservationsRepository") ReservationsRepository repository,
                                BookCatalogClient bookCatalogClient,
@@ -37,6 +40,7 @@ public class ReservationsService {
         this.bookCatalogClient = bookCatalogClient;
         this.loansRepository = loansRepository;
         this.rabbitTemplate = rabbitTemplate;
+        logger = LoggerFactory.getLogger(ReservationsService.class);
     }
 
     public List<Reservation> getAllReservations(){
@@ -60,12 +64,10 @@ public class ReservationsService {
         List<Reservation> reservations = repository.findReservationsByUserId(user.getId());
 
         if(reservations.size() >= MAX_RESERVATIONS_PER_USER){
-            System.out.println("You have reached the limit of active reservations!");
             throw new ReservationsLoansLimitException("You have reached the limit of active reservations!");
         }
 
         if(reservations.stream().anyMatch(e->e.getBookId().getId().equals(bookId.getId()))){
-            System.out.println("You already have active reservation for this book");
             throw new ReservationsLoansLimitException("You already have active reservation for this book");
         }
 
@@ -82,7 +84,7 @@ public class ReservationsService {
 
         Reservation reservation = repository.saveReservation(new Reservation(bookId, user.getId()));
 
-        System.out.println("Reservation ADDED");
+        logger.info("Created reservation with id: " + reservation.getId().getId());
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, RESERVATION_CREATED_ROUTING_KEY, new ReservationCreated(bookId.getId(), Instant.now()));
 
         return reservation;
@@ -96,10 +98,10 @@ public class ReservationsService {
 
             if(reservation.getUserId().getId().equals(userId.getId())){
                 repository.deleteReservation(reservationId);
-                System.out.println("Reservation Removed");
+                logger.info("Deleted reservation with id: " + reservationId.getId());
                 rabbitTemplate.convertAndSend(EXCHANGE_NAME, LOAN_RETURNED_ROUTING_KEY, new LoanReturned(reservation.getBookId().getId(), Instant.now()));
             }else{
-                System.out.println("User can't remove reservation of another user");
+                logger.error("User with id: " + userId.getId() + " can't remove reservation of user with id: " + reservation.getUserId().getId());
                 throw new BookNotFoundException("User can't remove reservation of another user");
             }
         }

@@ -36,15 +36,11 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJWTFromRequest(request);
 
-
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(jwt);
             HttpEntity <String> entity = new HttpEntity<String>(headers);
 
             User user = restTemplate.exchange(AUTH_PATH, HttpMethod.GET, entity, User.class).getBody();
-
-//            System.out.println(user.getUsername());
-//            System.out.println(user.getRole());
 
             //User Roles
             Collection<? extends GrantedAuthority> userRoles = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
@@ -56,7 +52,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         }catch(Exception ex){
-            //logger.error("Could not set user authentication in security context", ex);
             logger.error("Could not set user authentication in security context");
         }
 
