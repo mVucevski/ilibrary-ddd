@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,29 +49,31 @@ public class UsersService implements UserDetailsService {
     }
 
     public User saveUser(User newUser){
-        try{
-
-            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-            newUser.setConfirmPassword("");
-
-            Iterable<Role> roles = rolesRepository.findAllByNameEquals("USER");
-
-            if(roles.iterator().hasNext()){
-                Role role = roles.iterator().next();
-                newUser.setRoles(Stream.of(role).collect(Collectors.toSet()));
-            }else{
-                Role role = new Role();
-                role.setName("USER");
-                newUser.setRoles(Stream.of(role).collect(Collectors.toSet()));
-            }
-
-            logger.info("Saving User with id: " + newUser.getId());
-            return usersRepository.saveUser(newUser);
-
-        }catch(Exception ex){
-            logger.error("Can't save user with id: " + newUser.getId() + " because it already exists.");
+        if(usersRepository.findUserByUsername(newUser.getUsername()).isPresent()){
             throw new UsernameAlreadyExistsException("Username '" + newUser.getUsername() + "' already exists");
         }
+
+        if(!validateEmail(newUser.getUsername())){
+            throw new UsernameAlreadyExistsException("Please use valid e-mail address.");
+        }
+
+        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+        newUser.setConfirmPassword("");
+
+        Iterable<Role> roles = rolesRepository.findAllByNameEquals("USER");
+
+        if(roles.iterator().hasNext()){
+            Role role = roles.iterator().next();
+            newUser.setRoles(Stream.of(role).collect(Collectors.toSet()));
+        }else{
+            Role role = new Role();
+            role.setName("USER");
+            newUser.setRoles(Stream.of(role).collect(Collectors.toSet()));
+        }
+
+        logger.info("Saving User with id: " + newUser.getId());
+        return usersRepository.saveUser(newUser);
+
     }
 
     public User createUser(String username, String password, String fullName){
@@ -97,5 +101,13 @@ public class UsersService implements UserDetailsService {
         logger.info("Granting membership to User with id: " + user.getId());
 
         return true;
+    }
+
+    public final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public boolean validateEmail(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
     }
 }

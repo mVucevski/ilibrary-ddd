@@ -89,7 +89,7 @@ class LoanBook extends Component {
                 <form onSubmit={this.onSubmit}>
                   <div className="form-row">
                     <div className="col-md-5">
-                      <label htmlFor="isbn">Book ISBN</label>
+                      <label htmlFor="isbn">Book ID</label>
                       <input
                         type="text"
                         className="form-control"
@@ -174,7 +174,7 @@ class LoanBook extends Component {
                     <form onSubmit={this.onSubmitReturnLoan}>
                       <div className="form-row">
                         <div className="col-md-5">
-                          <label htmlFor="isbn">Book ISBN</label>
+                          <label htmlFor="isbn">Book ID</label>
                           <input
                             type="text"
                             className="form-control"

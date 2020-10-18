@@ -54,7 +54,7 @@ public class LendingManagementSchedulerService {
     }
 
 
-    @Scheduled(cron = "0 0 12 ? * MON,WED,SAT *", zone = "Europe/Skopje")
+    @Scheduled(cron = "0 0 12 * * MON,WED,SAT", zone = "Europe/Skopje")
     private void checkLoansToRemind() {
         System.out.println("Reminder!");
 

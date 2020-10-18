@@ -67,7 +67,9 @@ class UserDetails extends Component {
                       <div className="col-md-12">
                         <label>Membership expiration date:</label>
                         <label className="ml-2 font-weight-bolder">
-                          {dateConverter(userInfo.membershipExpirationDate)}
+                        {userInfo.membershipExpirationDate === null
+                          ? "/"
+                          : dateConverter(userInfo.membershipExpirationDate)}
                         </label>
                       </div>
                     </div>

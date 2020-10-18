@@ -48,7 +48,7 @@ public class ImagesService {
     public byte[] getImage(String name) throws IOException {
         File file = new File(FILE_PATH_IMG_STORAGE + name);
 
-        if(file == null){
+        if(file == null || !file.exists()){
             throw new FileNotFoundException("Not found!");
         }
 

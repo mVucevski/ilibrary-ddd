@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 public class User extends AbstractEntity<UserId> implements UserDetails {
 
+    @Column(unique=true)
     private String username;
 
     private String fullName;

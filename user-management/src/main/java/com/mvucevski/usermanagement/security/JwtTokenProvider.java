@@ -47,6 +47,7 @@ public class JwtTokenProvider {
         }catch(SignatureException ex){
             System.out.println("Invalid JWT Signature");
         }catch(MalformedJwtException ex){
+            System.out.println(token);
             System.out.println("Invalid JWT Token");
         }catch(ExpiredJwtException ex){
             System.out.println("Expired JWT token");

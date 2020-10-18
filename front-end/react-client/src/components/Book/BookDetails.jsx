@@ -143,17 +143,19 @@ class BookDetails extends Component {
           {errors.availableCopies && (
             <BookDoesntExist error={errors.availableCopies} />
           )}
+          {Object.values(errors)[0] &&  <BookDoesntExist error={Object.values(errors)[0]} />}
           <h4 style={{ fontWeight: "bold" }}>{book.title}</h4>
           <hr />
           <dt />
 
           <div className="row py-4">
             <div className="col-md-3">
-              <img
-                src={`http://localhost:8081/api/books/image/${book.coverUrl}`}
-                className="img-fluid"
-                alt=""
-              />
+            {book.coverUrl && <img
+              src={`http://localhost:8081/api/books/image/${book.coverUrl}`}
+              className="img-fluid"
+              alt=""
+            />}  
+            
             </div>
             <div className="col-md-6">
               <p className="lh">
