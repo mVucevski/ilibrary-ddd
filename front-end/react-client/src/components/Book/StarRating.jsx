@@ -3,8 +3,6 @@ import React from "react";
 const StarRating = props => {
   const { rating } = props;
 
-  console.log("RATING::", rating);
-
   let stars = [];
   let x = 1;
   const rating1 = Math.trunc(rating);

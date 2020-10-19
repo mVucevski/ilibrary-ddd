@@ -2,7 +2,6 @@ import React from "react";
 import { dateConverter } from "../../dateFormatter";
 
 const LoanDetails = props => {
-  console.log("PROPS:", props);
   const { loan } = props;
 
   return (

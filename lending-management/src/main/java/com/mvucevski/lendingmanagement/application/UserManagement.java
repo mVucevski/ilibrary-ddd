@@ -1,7 +1,7 @@
 package com.mvucevski.lendingmanagement.application;
 
-import com.mvucevski.lendingmanagement.domain.User;
-import com.mvucevski.lendingmanagement.domain.UserId;
+import com.mvucevski.lendingmanagement.domain.model.User;
+import com.mvucevski.lendingmanagement.domain.model.UserId;
 
 public interface UserManagement {
 

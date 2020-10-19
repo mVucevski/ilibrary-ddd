@@ -1,10 +1,8 @@
 package com.mvucevski.usermanagement;
 
-import com.mvucevski.usermanagement.domain.Role;
-import com.mvucevski.usermanagement.domain.User;
-import com.mvucevski.usermanagement.repository.RolesRepository;
-import com.mvucevski.usermanagement.repository.UsersRepository;
-import com.mvucevski.usermanagement.service.UsersService;
+import com.mvucevski.usermanagement.domain.model.Role;
+import com.mvucevski.usermanagement.domain.repository.RolesRepository;
+import com.mvucevski.usermanagement.application.UsersService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

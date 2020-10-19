@@ -30,8 +30,6 @@ export const getBooks = () => async (dispatch) => {
   try {
     const response = await axios.get(bookCatalogPath);
 
-    console.log("Get Books Response: ", response);
-
     dispatch({
       type: GET_BOOKS,
       payload: response.data,
@@ -56,8 +54,6 @@ export const getBook = (id, history) => async (dispatch) => {
       payload: {},
     });
   } catch (error) {
-    //console.log("ERROR:", error);
-
     dispatch({
       type: GET_ERRORS,
       payload: error.response.data,
@@ -126,8 +122,6 @@ export const searchBooks = (keyword) => async (dispatch) => {
     if (keyword === undefined || keyword === "") {
       keyword = " ";
     }
-    console.log("SEARC:", keyword);
-
     const response = await axios.get(`${bookCatalogPath}/search/${keyword}`);
 
     dispatch({

@@ -1,6 +1,6 @@
 package com.mvucevski.lendingmanagement.application;
 
-import com.mvucevski.lendingmanagement.domain.BookId;
+import com.mvucevski.lendingmanagement.domain.model.BookId;
 
 public interface BookCatalog {
 

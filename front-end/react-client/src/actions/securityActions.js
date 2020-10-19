@@ -57,8 +57,6 @@ export const login = (LoginRequest) => async (dispatch) => {
       },
     });
   } catch (error) {
-    console.log("LOGIN ERRORS:", error.response);
-
     dispatch({
       type: GET_ERRORS,
       payload: error.response.data,
@@ -71,8 +69,6 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("userRole");
   setJWTToken(false);
   window.location.href = "/";
-
-  //console.log("LOGOUT: ");
 
   dispatch({
     type: SET_CURRENT_USER,

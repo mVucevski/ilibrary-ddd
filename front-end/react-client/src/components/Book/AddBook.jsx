@@ -15,9 +15,9 @@ class AddBook extends Component {
       author: "",
       isbn: "",
       coverUrl: "",
-      genre: "",
+      genre: "Fiction",
       description: "",
-      language: "",
+      language: "English",
       publicationDate: new Date().toJSON().slice(0, 10),
       availableCopies: "",
       imageFile: "",
@@ -40,8 +40,6 @@ class AddBook extends Component {
       this.setState({
         imageFile: e.target.files[0]
       });
-
-      console.log(e.target.files[0]);
     }
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -73,9 +71,6 @@ class AddBook extends Component {
         headers: { "content-type": "multipart/form-data" }
       })
       .then(response => {
-        console.log("UIMG REPOSNE:", response);
-        console.log("NEW BOOK:", newBook);
-
         this.props.addBook(newBook, this.props.history);
       })
       .catch(error => {
@@ -88,8 +83,6 @@ class AddBook extends Component {
           });
         }
       });
-
-    // this.props.addBook(newBook, this.props.history);
   }
   render() {
     const { errors } = this.state;

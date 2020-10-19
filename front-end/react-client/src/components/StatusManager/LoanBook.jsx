@@ -58,14 +58,11 @@ class LoanBook extends Component {
 
   onSubmitMembership(e) {
     e.preventDefault();
-    console.log("222222222222222");
     this.props.addMembership(this.state.usernameMem);
   }
 
   onSubmitReturnLoan(e) {
     e.preventDefault();
-
-    console.log("SDADASD");
 
     this.props.returnLoan(this.state.book_isbn_ret, this.state.usernameRet);
   }

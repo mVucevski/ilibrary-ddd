@@ -1,7 +1,7 @@
 package com.mvucevski.usermanagement.security;
 
 
-import com.mvucevski.usermanagement.service.UsersService;
+import com.mvucevski.usermanagement.application.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

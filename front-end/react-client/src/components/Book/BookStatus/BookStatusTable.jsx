@@ -7,8 +7,6 @@ class BookStatusTable extends Component {
     const { reservations, loans } = this.props;
     let counter = 1;
 
-    console.log("LOANS", loans);
-
     const statusResTable = reservations.map(r => (
       <BookStatusItem key={counter} item={r} id={counter++} />
     ));

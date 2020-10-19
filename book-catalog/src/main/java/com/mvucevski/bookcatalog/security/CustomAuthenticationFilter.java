@@ -1,9 +1,6 @@
 package com.mvucevski.bookcatalog.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.mvucevski.bookcatalog.domain.User;
-import com.mvucevski.bookcatalog.exceptions.UnauthorizedAccessResponse;
+import com.mvucevski.bookcatalog.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,24 +36,23 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJWTFromRequest(request);
 
+            if(jwt != null){
+                HttpHeaders headers = new HttpHeaders();
+                headers.setBearerAuth(jwt);
+                HttpEntity <String> entity = new HttpEntity<String>(headers);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(jwt);
-            HttpEntity <String> entity = new HttpEntity<String>(headers);
+                User user = restTemplate.exchange(AUTH_PATH, HttpMethod.GET, entity, User.class).getBody();
 
-            User user = restTemplate.exchange(AUTH_PATH, HttpMethod.GET, entity, User.class).getBody();
+                //User Roles
+                Collection<? extends GrantedAuthority> userRoles = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 
-//            System.out.println(user.getUsername());
-//            System.out.println(user.getRole());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        user, null, userRoles);
 
-            //User Roles
-            Collection<? extends GrantedAuthority> userRoles = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    user, null, userRoles);
-
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
         }catch(Exception ex){
             logger.error("Could not set user authentication in security context");

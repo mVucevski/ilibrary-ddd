@@ -1,8 +1,8 @@
 package com.mvucevski.usermanagement.security;
 
-import com.mvucevski.usermanagement.domain.User;
-import com.mvucevski.usermanagement.domain.UserId;
-import com.mvucevski.usermanagement.service.UsersService;
+import com.mvucevski.usermanagement.domain.model.User;
+import com.mvucevski.usermanagement.domain.model.UserId;
+import com.mvucevski.usermanagement.application.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,6 @@
 package com.mvucevski.lendingmanagement.security;
 
-import com.mvucevski.lendingmanagement.domain.User;
+import com.mvucevski.lendingmanagement.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

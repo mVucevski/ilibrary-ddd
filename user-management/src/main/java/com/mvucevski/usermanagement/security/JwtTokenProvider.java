@@ -1,6 +1,6 @@
 package com.mvucevski.usermanagement.security;
 
-import com.mvucevski.usermanagement.domain.User;
+import com.mvucevski.usermanagement.domain.model.User;
 import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

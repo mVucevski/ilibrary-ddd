@@ -3,7 +3,7 @@ package com.mvucevski.bookreview;
 import com.mvucevski.bookreview.domain.model.BookId;
 import com.mvucevski.bookreview.domain.model.Review;
 import com.mvucevski.bookreview.domain.model.UserId;
-import com.mvucevski.bookreview.repository.DbReviewsRepository;
+import com.mvucevski.bookreview.domain.repository.DbReviewsRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

@@ -12,7 +12,6 @@ class UserManagmentButton extends Component {
 
   render() {
     const { validToken, user } = this.props.security;
-    //console.log("LOGOUT: ", this.props.security);
     const userIsNotAuthenticated = (
       <ul className="nav navbar-nav navbar-right">
         <li className="pr-2 py-1">
@@ -56,8 +55,6 @@ class UserManagmentButton extends Component {
     let headerLinks;
 
     if (validToken && user) {
-      console.log("USERNAMANGNET:", user);
-
       headerLinks = userIsAuthenticated;
     } else {
       headerLinks = userIsNotAuthenticated;

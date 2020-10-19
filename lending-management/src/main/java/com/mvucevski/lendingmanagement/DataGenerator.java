@@ -1,9 +1,8 @@
 package com.mvucevski.lendingmanagement;
 
-import com.mvucevski.lendingmanagement.domain.*;
 import com.mvucevski.lendingmanagement.port.client.UserManagementClient;
-import com.mvucevski.lendingmanagement.repository.loans.LoansRepository;
-import com.mvucevski.lendingmanagement.repository.reservations.ReservationsRepository;
+import com.mvucevski.lendingmanagement.domain.repository.loans.LoansRepository;
+import com.mvucevski.lendingmanagement.domain.repository.reservations.ReservationsRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 

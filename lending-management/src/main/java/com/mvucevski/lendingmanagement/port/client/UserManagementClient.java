@@ -1,8 +1,8 @@
 package com.mvucevski.lendingmanagement.port.client;
 
 import com.mvucevski.lendingmanagement.application.UserManagement;
-import com.mvucevski.lendingmanagement.domain.User;
-import com.mvucevski.lendingmanagement.domain.UserId;
+import com.mvucevski.lendingmanagement.domain.model.User;
+import com.mvucevski.lendingmanagement.domain.model.UserId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

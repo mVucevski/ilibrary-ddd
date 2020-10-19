@@ -7,8 +7,6 @@ const initialState = {
 };
 
 const booleanActionPayload = payload => {
-  console.log("PAYLOAD: ", payload);
-
   if (payload) {
     return true;
   } else {

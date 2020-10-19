@@ -1,12 +1,10 @@
 package com.mvucevski.bookcatalog;
 
-import com.mvucevski.bookcatalog.domain.*;
-import com.mvucevski.bookcatalog.repository.DbBooksRepository;
+import com.mvucevski.bookcatalog.domain.repository.DbBooksRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 
 @Component
 public class DataGenerator {

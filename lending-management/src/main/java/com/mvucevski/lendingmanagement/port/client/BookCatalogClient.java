@@ -1,14 +1,10 @@
 package com.mvucevski.lendingmanagement.port.client;
 
 import com.mvucevski.lendingmanagement.application.BookCatalog;
-import com.mvucevski.lendingmanagement.domain.BookId;
-import com.mvucevski.lendingmanagement.domain.User;
-import com.mvucevski.lendingmanagement.domain.UserId;
-import com.mvucevski.lendingmanagement.exceptions.BookNotFoundException;
+import com.mvucevski.lendingmanagement.domain.model.BookId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;

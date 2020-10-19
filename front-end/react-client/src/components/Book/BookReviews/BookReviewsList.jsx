@@ -17,8 +17,6 @@ class BookReviewsList extends Component {
   }
 
   componentDidMount() {
-    console.log("BOOKREVIEWSLIST id:", this.props.id);
-
     this.props.getReviews(this.props.id);
   }
 
@@ -57,7 +55,6 @@ class BookReviewsList extends Component {
 
     if (reviews) {
       reviewList = reviews.map(r => <ReviewItem key={counter++} item={r} />);
-      console.log("userreview all reviews", reviews);
       userReview = reviews.find(e => e.userId === user.id);
     }
 

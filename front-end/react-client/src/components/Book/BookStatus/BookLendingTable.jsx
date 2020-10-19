@@ -7,24 +7,16 @@ import {getReservationsAndLoans} from "../../../actions/reservationActions";
 class BookLendingTable extends Component {
 
   componentDidMount() {
-    // console.log("Book id:", this.props.id);
-
     this.props.getReservationsAndLoans(this.props.id);
-
-    // console.log("THIS PROPS LENGIND MOUNT:", this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
-
-    console.log("LENGIND componentWillReceiveProps:", nextProps);
   }
 
   render() {
-    
-    console.log("PROPS LENDING:", this.props);
     const { reservations, loans } = this.props.status;
     let counter = 1;
 

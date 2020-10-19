@@ -39,8 +39,6 @@ class BookDetails extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
-    console.log("BOOKDETALIS: componentWillReceiveProps ", nextProps);
-
     const { user } = this.props.security;
     let reservations;
 
@@ -57,8 +55,6 @@ class BookDetails extends Component {
       let reservation = reservations.find(
         item => item.userId === user.id
       )
-        
-        console.log("IN IF 1: ", reservation);
 
       if(reservation){
         this.setState({

@@ -18,4 +18,22 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleInvalidISBNException(InvalidISBNException ex, WebRequest request){
+        InvalidISBNExceptionResponse exceptionResponse = new InvalidISBNExceptionResponse(ex.getMessage());
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleInvalidTitleException(InvalidTitleException ex, WebRequest request) {
+        InvalidTitleExceptionResponse exceptionResponse = new InvalidTitleExceptionResponse(ex.getMessage());
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleInvalidAuthorException(InvalidAuthorException ex, WebRequest request){
+        InvalidAuthorExceptionResponse exceptionResponse = new InvalidAuthorExceptionResponse(ex.getMessage());
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 }

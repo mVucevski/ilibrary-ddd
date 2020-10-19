@@ -6,7 +6,6 @@ const invalidTokenMsg = "Expired token";
 export function expiredTokenMiddleware({ dispatch }) {
   return function(next) {
     return function(action) {
-      //console.log("MIDDLEWARE:", action.payload);
       if (action.type === GET_ERRORS) {
         if (action.payload.unauthorizedAccess === invalidTokenMsg) {
           return dispatch(logout());

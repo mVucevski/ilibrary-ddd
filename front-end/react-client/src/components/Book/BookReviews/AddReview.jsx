@@ -3,8 +3,6 @@ import React, { Component } from "react";
 class AddReview extends Component {
   constructor(props) {
     super(props);
-    console.log("ADD REVIEW ROPS:", props);
-
     if (props.oldReview) {
       this.state = {
         rating: props.oldReview.rating + "",
